@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface ISupplierInvoiceURLConnectionConnector : IEntityConnector<Sort.By.SupplierInvoiceURLConnection>
+    public interface ISupplierInvoiceURLConnectionConnector : IEntityConnector<Sort.By.SupplierInvoiceURLConnection?>
     {
         /// <summary>
         /// Gets an supplier invoice url connection based on id
@@ -30,12 +29,12 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-    public class SupplierInvoiceURLConnectionConnector : EntityConnector<SupplierInvoiceURLConnection, SupplierInvoiceURLConnection, Sort.By.SupplierInvoiceURLConnection>, ISupplierInvoiceURLConnectionConnector
+    public class SupplierInvoiceURLConnectionConnector : EntityConnector<SupplierInvoiceURLConnection, SupplierInvoiceURLConnection, Sort.By.SupplierInvoiceURLConnection?>, ISupplierInvoiceURLConnectionConnector
     {
         /// <remarks/>
         public SupplierInvoiceURLConnectionConnector()
         {
-            base.Resource = "supplierinvoiceurlconnections";
+            Resource = "supplierinvoiceurlconnections";
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The found connection</returns>
         public SupplierInvoiceURLConnection Get(string id)
         {
-            return base.BaseGet(id);
+            return BaseGet(id);
         }
 
         /// <summary>
@@ -55,7 +54,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The created supplier invoice url connection</returns>
         public SupplierInvoiceURLConnection Create(SupplierInvoiceURLConnection supplierInvoiceUrlConnection)
         {
-            return base.BaseCreate(supplierInvoiceUrlConnection);
+            return BaseCreate(supplierInvoiceUrlConnection);
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>If the supplier invoice url connection was deleted or not</returns>
         public void Delete(string id)
         {
-            base.BaseDelete(id);
+            BaseDelete(id);
         }
     }
 }

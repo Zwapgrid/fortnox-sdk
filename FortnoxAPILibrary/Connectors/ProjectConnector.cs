@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IProjectConnector : IEntityConnector<Sort.By.Project>
+    public interface IProjectConnector : IEntityConnector<Sort.By.Project?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -49,40 +48,28 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets at list of project, use the properties of ProjectConnector to limit the search
         /// </summary>
         /// <returns>A list of projects</returns>
-        Projects Find();
+        EntityCollection<ProjectSubset> Find();
     }
 
     /// <remarks/>
-	public class ProjectConnector : EntityConnector<Project, Projects, Sort.By.Project>, IProjectConnector
-    {
-
-		/// <remarks/>
-		public enum Status
-		{
-			/// <remarks/>
-			NOTSTARTED,
-			/// <remarks/>
-			ONGOING,
-			/// <remarks/>
-			COMPLETED
-		}
-
-		/// <summary>
+    public class ProjectConnector : EntityConnector<Project, EntityCollection<ProjectSubset>, Sort.By.Project?>, IProjectConnector
+	{
+        /// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Description { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string ProjectLeader { get; set; }
 
 		/// <remarks/>
 		public ProjectConnector()
 		{
-			base.Resource = "projects";
+			Resource = "projects";
 		}
 
 		/// <summary>
@@ -92,7 +79,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found project</returns>
 		public Project Get(string projectNumber)
 		{
-			return base.BaseGet(projectNumber);
+			return BaseGet(projectNumber);
 		}
 
 		/// <summary>
@@ -102,7 +89,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated project</returns>
 		public Project Update(Project project)
 		{
-			return base.BaseUpdate(project, project.ProjectNumber.ToString());
+			return BaseUpdate(project, project.ProjectNumber);
 		}
 
 		/// <summary>
@@ -112,7 +99,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created project</returns>
 		public Project Create(Project project)
 		{
-			return base.BaseCreate(project);
+			return BaseCreate(project);
 		}
 
 		/// <summary>
@@ -122,16 +109,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>If the project was deleted or not</returns>
 		public void Delete(string projectNumber)
 		{
-			base.BaseDelete(projectNumber);
+			BaseDelete(projectNumber);
 		}
 
 		/// <summary>
 		/// Gets at list of project, use the properties of ProjectConnector to limit the search
 		/// </summary>
 		/// <returns>A list of projects</returns>
-		public Projects Find()
+		public EntityCollection<ProjectSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

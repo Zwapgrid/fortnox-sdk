@@ -1,10 +1,14 @@
-﻿namespace FortnoxAPILibrary.Connectors
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
+
+namespace FortnoxAPILibrary.Connectors
 {
     /// <inheritdoc />
-    public interface ICustomerConnector : IEntityConnector<Sort.By.Customer>
+    public interface ICustomerConnector : IEntityConnector<Sort.By.Customer?>
     {
         /// <remarks/>
-        Filter.Customer FilterBy { get; set; }
+        Filter.Customer? FilterBy { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
@@ -82,145 +86,75 @@
         /// Gets a list of customers
         /// </summary>
         /// <returns>A list of customers</returns>
-        Customers Find();
+        EntityCollection<CustomerSubset> Find();
     }
 
     /// <remarks/>
-	public class CustomerConnector : EntityConnector<Customer, Customers, Sort.By.Customer>, ICustomerConnector
-    {
-		/// <remarks/>
-		public enum Type
-		{
-			/// <remarks/>
-			PRIVATE,
-			/// <remarks/>
-			COMPANY,
-            /// <summary>
-		    /// This is NOT a valid input for customer type, never set a customer type to this value. This only occurs in some cases when fetching from Fortnox.
-		    /// When a customer in Fortnox has this state, it is not possible to update that customer, the request will fail with error 2001200 (Ogiltig kundtyp/Invalid customer type)
-            /// </summary>
-            UNDEFINED
-        }
-
-		/// <remarks/>
-		public enum VATType
-		{
-			/// <remarks/>
-			SEVAT,
-			/// <remarks/>
-			SEREVERSEDVAT,
-			/// <remarks/>
-			EUREVERSEDVAT,
-			/// <remarks/>
-			EUVAT,
-			/// <remarks/>
-			EXPORT
-		}
-
-		/// <remarks/>
-		public enum DefaultInvoiceDeliveryType
-		{
-			/// <remarks/>
-			EMAIL,
-			/// <remarks/>
-			PRINT,
-			/// <remarks/>
-			PRINTSERVICE,
-            /// <remarks/>
-            ELECTRONICINVOICE
-		}
-
-		/// <remarks/>
-		public enum DefaultOfferDeliveryType
-		{
-			/// <remarks/>
-			EMAIL,
-			/// <remarks/>
-			PRINT
-		}
-
-		/// <remarks/>
-		public enum DefaultOrderDeliveryType
-		{
-			/// <remarks/>
-			EMAIL,
-			/// <remarks/>
-			PRINT
-		}
-
-		private bool filterBySet = false;
-		private Filter.Customer filterBy;
-		/// <remarks/>
-		[FilterProperty("filter")]
-		public Filter.Customer FilterBy
-		{
-			get { return filterBy; }
-			set
-			{
-				filterBy = value;
-				filterBySet = true;
-			}
-		}
+    public class CustomerConnector : EntityConnector<Customer, EntityCollection<CustomerSubset>, Sort.By.Customer?>
+	{
+        /// <remarks/>
+		[SearchParameter("filter")]
+		public Filter.Customer? FilterBy { get; set; }
 
 
-		/// <summary>
-		/// Use with Find() to limit the search result
-		/// </summary>
-		[FilterProperty]
+        /// <summary>
+        /// Use with Find() to limit the search result
+        /// </summary>
+        [SearchParameter]
 		public string City { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string CustomerNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Email { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Name { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string OrganisationNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Phone { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string ZipCode { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string GLN { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string GLNDelivery { get; set; }
 
 		/// <remarks/>
 		public CustomerConnector()
 		{
-			base.Resource = "customers";
+			Resource = "customers";
 		}
 
 
@@ -231,7 +165,7 @@
 		/// <returns>The found customer</returns>
 		public Customer Get(string customerNumber)
 		{
-			return base.BaseGet(customerNumber);
+			return BaseGet(customerNumber);
 		}
 
 		/// <summary>
@@ -241,7 +175,7 @@
 		/// <returns>The updated customer</returns>
 		public Customer Update(Customer customer)
 		{
-			return base.BaseUpdate(customer, customer.CustomerNumber);
+			return BaseUpdate(customer, customer.CustomerNumber);
 		}
 
 		/// <summary>
@@ -251,7 +185,7 @@
 		/// <returns>The created customer</returns>
 		public Customer Create(Customer customer)
 		{
-			return base.BaseCreate(customer);
+			return BaseCreate(customer);
 		}
 
 		/// <summary>
@@ -260,16 +194,16 @@
 		/// <param name="customerNumber">The customernumber to delete</param>
 		public void Delete(string customerNumber)
 		{
-			base.BaseDelete(customerNumber);
+			BaseDelete(customerNumber);
 		}
 
 		/// <summary>
 		/// Gets a list of customers
 		/// </summary>
 		/// <returns>A list of customers</returns>
-		public Customers Find()
+		public EntityCollection<CustomerSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

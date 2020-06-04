@@ -1,8 +1,4 @@
-﻿
-using System.Net;
-using System.IO;
-using System.Xml;
-namespace FortnoxAPILibrary
+﻿namespace FortnoxAPILibrary
 {
 	/// <remarks/>
 	public static class ConnectionCredentials
@@ -12,8 +8,5 @@ namespace FortnoxAPILibrary
 
 		/// <remarks/>
 		public static string ClientSecret { get; set; }
-
-        /// <remarks/>
-        public static string FortnoxAPIServer = "https://api.fortnox.se/3";
-	}
+    }
 }

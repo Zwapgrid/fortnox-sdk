@@ -1,193 +1,308 @@
-﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+using FortnoxAPILibrary.Serialization;
+using Newtonsoft.Json;
 
-namespace FortnoxAPILibrary
+// ReSharper disable UnusedMember.Global
+
+namespace FortnoxAPILibrary.Entities
 {
     /// <remarks/>
-    public class Contract
+    [Entity(SingularName = "Contract", PluralName = "Contracts")]
+    public class Contract 
     {
         /// <remarks/>
-        public string Active { get; set; }
+        [JsonProperty]
+        public bool? Active { get; set; }
 
         /// <remarks/>
-        public string AdministrationFee { get; set; }
+        [JsonProperty]
+        public decimal? AdministrationFee { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string Comments { get; set; }
 
         /// <remarks/>
-        public string Continuous { get; set; }
+        [JsonProperty]
+        public bool? Continuous { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string ContractDate { get; set; }
 
         /// <remarks/>
-        public string ContractLength { get; set; }
+        [JsonProperty]
+        public int? ContractLength { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string ContributionPercent { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public decimal? ContributionPercent { get; private set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string ContributionValue { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public decimal? ContributionValue { get; private set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string CostCenter { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string Currency { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string CustomerName { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string CustomerNumber { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string DocumentNumber { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public ContractEmailInformation EmailInformation { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string ExternalInvoiceReference1 { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string ExternalInvoiceReference2 { get; set; }
 
         /// <remarks/>
-        public string Freight { get; set; }
+        [JsonProperty]
+        public decimal? Freight { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string Gross { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public decimal? Gross { get; private set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string HouseWork { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public bool? HouseWork { get; private set; }
 
         /// <remarks/>
-        public string InvoiceDiscount { get; set; }
+        [JsonProperty]
+        public decimal? InvoiceDiscount { get; set; }
 
         /// <remarks/>
-        public string InvoiceInterval { get; set; }
+        [JsonProperty]
+        public int? InvoiceInterval { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string InvoicesRemaining { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public int? InvoicesRemaining { get; private set; }
 
         /// <remarks/>
+        [JsonProperty]
         public List<InvoiceRow> InvoiceRows { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string Language { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string LastInvoiceDate { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string LastInvoiceDate { get; private set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string Net { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public decimal? Net { get; private set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string OurReference { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string PeriodEnd { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string PeriodStart { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string PriceList { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string PrintTemplate { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string Project { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string Remarks { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string TaxReduction { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public decimal? TaxReduction { get; private set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string TemplateName { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string TemplateName { get; private set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string TemplateNumber { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string TermsOfDelivery { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string TermsOfPayment { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string Total { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public decimal? Total { get; private set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string TotalToPay { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public decimal? TotalToPay { get; private set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string TotalVAT { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public decimal? TotalVAT { get; private set; }
 
         /// <remarks/>
-        public string VATIncluded { get; set; }
+        [JsonProperty]
+        public bool? VATIncluded { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string WayOfDelivery { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string YourOrderNumber { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true), XmlAttributeAttribute]
-        public string url { get; set; }
+        [JsonProperty(PropertyName = "@url")]
+        public string Url { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true), XmlAttributeAttribute]
-        public string urlTaxReductionList { get; set; }
+        [JsonProperty(PropertyName = "@urlTaxReductionList")]
+        public string UrlTaxReductionList { get; set; }
 
         /// <remarks/>
         public Contract()
         {
-            this.InvoiceRows = new List<InvoiceRow>();
+            InvoiceRows = new List<InvoiceRow>();
         }
+    }
+
+    /// <remarks/>
+    [Entity(SingularName = "Contract", PluralName = "Contracts")]
+    public class ContractSubset
+    {
+        /// <remarks/>
+        [JsonProperty(PropertyName = "@url")]
+        public string Url { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public bool? Continuous { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public int? ContractLength { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string Currency { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string CustomerName { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string CustomerNumber { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string DocumentNumber { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public int? InvoiceInterval { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public int? InvoicesRemaining { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string LastInvoiceDate { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string PeriodStart { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string PeriodEnd { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string Status { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string TemplateNumber { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public decimal? Total { get; set; }
     }
 
     /// <remarks/>
     public class ContractEmailInformation
     {
         /// <remarks/>
+        [JsonProperty]
         public string EmailAddressFrom { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string EmailAddressTo { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string EmailAddressCC { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string EmailAddressBCC { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string EmailSubject { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string EmailBody { get; set; }
     }
 }

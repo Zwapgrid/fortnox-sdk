@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IFinancialYearConnector : IEntityConnector<Sort.By.FinancialYear>
+    public interface IFinancialYearConnector : IEntityConnector<Sort.By.FinancialYear?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -27,22 +29,22 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of financial years
         /// </summary>
         /// <returns>A list of financial years</returns>
-        FinancialYears Find();
+        EntityCollection<FinancialYearSubset> Find();
     }
 
     /// <remarks/>
-	public class FinancialYearConnector : EntityConnector<FinancialYear, FinancialYears, Sort.By.FinancialYear>, IFinancialYearConnector
-    {
+    public class FinancialYearConnector : EntityConnector<FinancialYear, EntityCollection<FinancialYearSubset>, Sort.By.FinancialYear?>, IFinancialYearConnector
+	{
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Date { get; set; }
 
 		/// <remarks/>
 		public FinancialYearConnector()
 		{
-			base.Resource = "financialyears";
+			Resource = "financialyears";
 		}
 
 		/// <summary>
@@ -52,7 +54,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns></returns>
 		public FinancialYear Get(int id)
 		{
-			return base.BaseGet(id.ToString());
+			return BaseGet(id.ToString());
 		}
 
 		/// <summary>
@@ -62,25 +64,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created financial year</returns>
 		public FinancialYear Create(FinancialYear financialYear)
 		{
-			return base.BaseCreate(financialYear);
+			return BaseCreate(financialYear);
 		}
 
 		/// <summary>
 		/// Gets a list of financial years
 		/// </summary>
 		/// <returns>A list of financial years</returns>
-		public FinancialYears Find()
+		public EntityCollection<FinancialYearSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
-
-		/// <remarks/>
-		public enum AccountingMethod
-		{
-			/// <remarks/>
-			ACCRUAL,
-			/// <remarks/>
-			CASH
-		}
-	}
+    }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
-using Microsoft.AspNetCore.StaticFiles;
+using FortnoxAPILibrary.Entities;
+using MimeTypes;
 
 namespace FortnoxAPILibrary.Connectors
 {
@@ -69,7 +71,7 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-    public class InboxConnector : EntityConnector<Folder, Folder, Sort.By.Folder>, IInboxConnector
+    public class InboxConnector : EntityConnector<Folder, EntityWrapper<Folder>, Sort.By.Folder>, IInboxConnector
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -96,7 +98,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <remarks/>
         public InboxConnector()
         {
-            base.Resource = BaseResource;
+            Resource = BaseResource;
         }
 
         /// <summary>
@@ -105,25 +107,25 @@ namespace FortnoxAPILibrary.Connectors
         public enum InboxFolder
         {
             /// <remarks/>
-            [RealValue("")]
+            [StringValue("")]
             Root,
             /// <remarks/>
-            [RealValue("inbox_s")]
+            [StringValue("inbox_s")]
             SupplierInvoices,
             /// <remarks/>
-            [RealValue("inbox_v")]
+            [StringValue("inbox_v")]
             Vouchers,
             /// <remarks/>
-            [RealValue("inbox_d")]
+            [StringValue("inbox_d")]
             DailyTakings,
             /// <remarks/>
-            [RealValue("inbox_a")]
+            [StringValue("inbox_a")]
             AssetRegister,
             /// <remarks/>
-            [RealValue("inbox_b")]
+            [StringValue("inbox_b")]
             BankFiles,
             /// <remarks/>
-            [RealValue("inbox_kf")]
+            [StringValue("inbox_kf")]
             CustomerInvoices
         }
 
@@ -133,30 +135,30 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>A list of Files and Folders</returns>
         public Folder Find(InboxFolder inboxFolder = InboxFolder.Root)
         {
-            this.Parameters = new Dictionary<string, string>();
+            Parameters = new Dictionary<string, string>();
 
             if (inboxFolder == InboxFolder.Root)
             {
                 if (!string.IsNullOrWhiteSpace(Path))
                 {
-                    this.Parameters.Add("path", this.Path);
+                    Parameters.Add("path", Path);
                 }
 
                 if (!string.IsNullOrWhiteSpace(FolderId))
                 {
-                    base.Resource = BaseResource + "/" + FolderId;
+                    Resource = BaseResource + "/" + FolderId;
                 }
                 else if (!string.IsNullOrWhiteSpace(Id))
                 {
-                    base.Resource = BaseResource + "/" + Id;
+                    Resource = BaseResource + "/" + Id;
                 }
             }
             else
             {
-                base.Resource = BaseResource + "/" + GetRealValueFromAttribute(inboxFolder);
+                Resource = BaseResource + "/" + GetRealValueFromAttribute(inboxFolder);
             }
 			
-            return base.BaseFind(this.Parameters);
+            return BaseFind(Parameters)?.Entity;
         }
 
         private static string GetRealValueFromAttribute(InboxFolder f)
@@ -165,10 +167,10 @@ namespace FortnoxAPILibrary.Connectors
 
             Type type = f.GetType();
             MemberInfo[] memInfo = type.GetMember(f.ToString());
-            object[] attrs = memInfo[0].GetCustomAttributes(typeof(RealValueAttribute), false);
+            object[] attrs = memInfo[0].GetCustomAttributes(typeof(StringValueAttribute), false);
             if (attrs.Length > 0)
             {
-                resource = ((RealValueAttribute)attrs[0]).RealValue;
+                resource = ((StringValueAttribute)attrs[0]).RealValue;
             }
             return resource;
         }
@@ -181,9 +183,9 @@ namespace FortnoxAPILibrary.Connectors
         ///<returns>Information of the uploaded file</returns>
         public File UploadFile(string localPath, InboxFolder inboxFolder = InboxFolder.Root)
         {
-            base.Resource = BaseResource;
-
-            return base.BaseUploadFile(localPath, GetRealValueFromAttribute(inboxFolder));
+            Resource = BaseResource;
+            
+            return UploadFile<File>(localPath, null, GetRealValueFromAttribute(inboxFolder));
         }
 
         /// <summary>
@@ -200,17 +202,23 @@ namespace FortnoxAPILibrary.Connectors
 
             Resource = BaseResource;
 
-            var uploadedFile = base.BaseUploadFile("", GetRealValueFromAttribute(inboxFolder), data, name);
+            RequestUriString += "?folderid=" + Uri.EscapeDataString(GetRealValueFromAttribute(inboxFolder));
+            
+            var uploadedFile = UploadFile<File>("", data, name);
 
-            var provider = new FileExtensionContentTypeProvider();
-            provider.TryGetContentType(name, out var contentType);
-            uploadedFile.ContentType = contentType;
+            uploadedFile.ContentType = GetMimeType(name);
 
             uploadedFile.Data = new byte[data.Length];
 
             data.CopyTo(uploadedFile.Data, 0);
 
             return uploadedFile;
+        }
+        
+        private static string GetMimeType(string name)
+        {
+            var extension = System.IO.Path.GetExtension(name);
+            return MimeTypeMap.GetMimeType(extension);
         }
 
         /// <summary>
@@ -222,7 +230,7 @@ namespace FortnoxAPILibrary.Connectors
             stream.Position = 0;
             var arr = new byte[stream.Length];
             stream.Read(arr, 0, (int)stream.Length);
-            return this.UploadFileData(arr, name, inboxFolder);
+            return UploadFileData(arr, name, inboxFolder);
         }
 
         /// <summary>
@@ -264,7 +272,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <param name="fileId">The id of the file to be deleted.</param>
         public void DeleteFile(string fileId)
         {
-            base.BaseDelete(fileId);
+            BaseDelete(fileId);
         }
     }
 }

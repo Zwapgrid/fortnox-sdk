@@ -1,7 +1,10 @@
-﻿
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
+
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface ICostCenterConnector : IEntityConnector<Sort.By.CostCenter>
+    public interface ICostCenterConnector : IEntityConnector<Sort.By.CostCenter?>
     {
         /// <summary>
         /// Finds a cost center based on cost center code
@@ -35,16 +38,16 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of cost centers
         /// </summary>
         /// <returns>A list of cost centers</returns>
-        CostCenters Find();
+        EntityCollection<CostCenterSubset> Find();
     }
 
     /// <remarks/>
-	public class CostCenterConnector : EntityConnector<CostCenter, CostCenters, Sort.By.CostCenter>, ICostCenterConnector
+	public class CostCenterConnector : EntityConnector<CostCenter, EntityCollection<CostCenterSubset>, Sort.By.CostCenter?>, ICostCenterConnector
     {
 		/// <remarks/>
 		public CostCenterConnector()
 		{
-			base.Resource = "costcenters";
+			Resource = "costcenters";
 		}
 
 		/// <summary>
@@ -54,7 +57,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The resulting cost center</returns>
 		public CostCenter Get(string costCenterCode)
 		{
-			return base.BaseGet(costCenterCode);
+			return BaseGet(costCenterCode);
 		}
 
 
@@ -65,7 +68,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated CostCenter</returns>
 		public CostCenter Update(CostCenter costCenter)
 		{
-			return base.BaseUpdate(costCenter, costCenter.Code);
+			return BaseUpdate(costCenter, costCenter.Code);
 		}
 
 		/// <summary>
@@ -75,7 +78,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns></returns>
 		public CostCenter Create(CostCenter costCenter)
 		{
-			return base.BaseCreate(costCenter);
+			return BaseCreate(costCenter);
 		}
 
 		/// <summary>
@@ -85,16 +88,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>If the cost center was deleted or not</returns>
 		public void Delete(string costCenterCode)
 		{
-			base.BaseDelete(costCenterCode);
+			BaseDelete(costCenterCode);
 		}
 
 		/// <summary>
 		/// Gets a list of cost centers
 		/// </summary>
 		/// <returns>A list of cost centers</returns>
-		public CostCenters Find()
+		public EntityCollection<CostCenterSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

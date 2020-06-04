@@ -1,129 +1,158 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Serialization;
+using Newtonsoft.Json;
 
-namespace FortnoxAPILibrary
+// ReSharper disable UnusedMember.Global
+
+namespace FortnoxAPILibrary.Entities
 {
     /// <remarks />
+    [Entity(SingularName = "CompanySettings")]
     public class CompanySettings
     {
         /// <remarks />
-        [ReadOnly(true)]
-        public string Address { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Address { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string BG { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string BG { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string BIC { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string BIC { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string BranchCode { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string BranchCode { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string City { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string City { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string ContactFirstName { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string ContactFirstName { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string ContactLastName { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string ContactLastName { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string Country { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Country { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string CountryCode { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string CountryCode { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string DatabaseNumber { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string DatabaseNumber { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string Domicile { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Domicile { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string Email { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Email { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string Fax { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Fax { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string IBAN { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string IBAN { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string Name { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Name { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string OrganizationNumber { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string OrganizationNumber { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string PG { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string PG { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string Phone1 { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Phone1 { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string Phone2 { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Phone2 { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string TaxEnabled { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string TaxEnabled { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string VATNumber { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string VATNumber { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string VisitAddress { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string VisitAddress { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string VisitCity { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string VisitCity { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string VisitCountry { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string VisitCountry { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string VisitCountryCode { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string VisitCountryCode { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string VisitName { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string VisitName { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string VisitZipCode { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string VisitZipCode { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string WWW { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string WWW { get; private set; }
 
         /// <remarks />
-        [ReadOnly(true)]
-        public string ZipCode { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string ZipCode { get; private set; }
 
     }
 }

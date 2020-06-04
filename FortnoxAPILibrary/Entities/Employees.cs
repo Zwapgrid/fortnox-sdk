@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace FortnoxAPILibrary.Entities
 {
@@ -11,19 +12,7 @@ namespace FortnoxAPILibrary.Entities
         /// Full url to employee
         /// </summary>
         [XmlAttribute(AttributeName = "url")]
+        [JsonProperty(PropertyName = "@url")]
         public string Url { get; set; }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [XmlRoot(ElementName = "Employees")]
-    public class Employees : PagedResult
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        [XmlElement(ElementName = "EmployeeSubset")]
-        public List<EmployeeSubset> EmployeeSubset { get; set; }
     }
 }

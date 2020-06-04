@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface ISupplierInvoiceConnector : IFinancialYearBasedEntityConnector<SupplierInvoice, SupplierInvoices, Sort.By.SupplierInvoice>
+    public interface ISupplierInvoiceConnector : IFinancialYearBasedEntityConnector<SupplierInvoice, EntityCollection<SupplierInvoiceSubset>, Sort.By.SupplierInvoice?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -84,7 +86,7 @@ namespace FortnoxAPILibrary.Connectors
         string YourReference { get; set; }
 
         /// <remarks/>
-        Filter.SupplierInvoice FilterBy { get; set; }
+        Filter.SupplierInvoice? FilterBy { get; set; }
 
         /// <summary>
         /// Get a supplier invoice based on document number
@@ -111,7 +113,7 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets at list of supplier invoices
         /// </summary>
         /// <returns>A list of supplier invoices</returns>
-        SupplierInvoices Find();
+        EntityCollection<SupplierInvoiceSubset> Find();
 
         /// <summary>
         /// Bookkeeps a supplier invoice
@@ -150,142 +152,112 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-	public class SupplierInvoiceConnector : FinancialYearBasedEntityConnector<SupplierInvoice, SupplierInvoices, Sort.By.SupplierInvoice>, ISupplierInvoiceConnector
-    {
-		/// <remarks/>
-		public enum VATType
-        {
-            /// <remarks/>
-            NORMAL,
-            /// <remarks/>
-            REVERSE,
-            /// <remarks/>
-            EUINTERNAL
-        }
-
-        /// <remarks/>
-        public enum SalesType
-        {
-            /// <remarks/>
-            STOCK,
-            /// <remarks/>
-            SERVICE
-        }
-
+    public class SupplierInvoiceConnector : FinancialYearBasedEntityConnector<SupplierInvoice, EntityCollection<SupplierInvoiceSubset>, Sort.By.SupplierInvoice?>, ISupplierInvoiceConnector
+	{
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
-        public string FromDate { get; set; }
-
-        /// <summary>
-        /// Use with Find() to limit the search result
-        /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string ToDate { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string SupplierNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string SupplierName { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string OrganisationNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Phone { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string ZipCode { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string City { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string Email { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string OCR { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string InvoiceNumber { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string SerialNumber { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string CostCenter { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string Project { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string OurReference { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string YourReference { get; set; }
 
-        private bool filterBySet = false;
-        private Filter.SupplierInvoice filterBy;
+        /// <summary>
+        /// Use with Find() to limit the search result
+        /// </summary>
+        [SearchParameter]
+        public string FromDate { get; set; }
+
         /// <remarks/>
-        [FilterProperty("filter")]
-        public Filter.SupplierInvoice FilterBy
-        {
-            get { return filterBy; }
-            set
-            {
-                filterBy = value;
-                filterBySet = true;
-            }
-        }
+        [SearchParameter("filter")]
+        public Filter.SupplierInvoice? FilterBy { get; set; }
 
 		/// <remarks/>
 		public SupplierInvoiceConnector()
 		{
-			base.Resource = "supplierinvoices";
+			Resource = "supplierinvoices";
 		}
 
 
@@ -296,7 +268,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns></returns>
 		public SupplierInvoice Get(string documentNumber)
 		{
-			return base.BaseGet(documentNumber.ToString());
+			return BaseGet(documentNumber);
 		}
 
 		/// <summary>
@@ -306,7 +278,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns></returns>
 		public SupplierInvoice Update(SupplierInvoice supplierInvoice)
 		{
-			return base.BaseUpdate(supplierInvoice, supplierInvoice.GivenNumber.ToString());
+			return BaseUpdate(supplierInvoice, supplierInvoice.GivenNumber);
 		}
 
 		/// <summary>
@@ -316,16 +288,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created supplier invoice</returns>
 		public SupplierInvoice Create(SupplierInvoice supplierInvoice)
 		{
-			return base.BaseCreate(supplierInvoice);
+			return BaseCreate(supplierInvoice);
 		}
 
 		/// <summary>
 		/// Gets at list of supplier invoices
 		/// </summary>
 		/// <returns>A list of supplier invoices</returns>
-		public SupplierInvoices Find()
+		public EntityCollection<SupplierInvoiceSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 
 		/// <summary>
@@ -335,7 +307,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The bookkept invoice</returns>
 		public SupplierInvoice Bookkeep(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "bookkeep");
+			return DoAction(documentNumber, "bookkeep");
 		}
 
 		/// <summary>
@@ -345,7 +317,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The cancelled invoice</returns>
 		public SupplierInvoice Cancel(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "cancel");
+			return DoAction(documentNumber, "cancel");
 		}
 
 		/// <summary>
@@ -355,7 +327,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The credited supplier invoice</returns>
 		public SupplierInvoice Credit(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "credit");
+			return DoAction(documentNumber, "credit");
 		}
 
 		/// <summary>
@@ -365,7 +337,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns></returns>
 		public SupplierInvoice ApprovalPayment(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "approvalpayment");
+			return DoAction(documentNumber, "approvalpayment");
 		}
 
 		/// <summary>
@@ -375,7 +347,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns></returns>
 		public SupplierInvoice ApprovalBookkeep(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "approvalbookkeep");
+			return DoAction(documentNumber, "approvalbookkeep");
 		}
 	}
 }

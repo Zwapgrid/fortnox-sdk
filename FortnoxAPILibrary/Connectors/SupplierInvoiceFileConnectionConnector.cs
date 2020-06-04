@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface ISupplierInvoiceFileConnectionConnector : IEntityConnector<Sort.By.SupplierInvoiceFileConnection>
+    public interface ISupplierInvoiceFileConnectionConnector : IEntityConnector<Sort.By.SupplierInvoiceFileConnection?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -33,22 +35,22 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of supplier invoice file Connections
         /// </summary>
         /// <returns></returns>
-        SupplierInvoiceFileConnections Find();
+        EntityCollection<SupplierInvoiceFileConnectionSubset> Find();
     }
 
     /// <remarks/>
-	public class SupplierInvoiceFileConnectionConnector : EntityConnector<SupplierInvoiceFileConnection, SupplierInvoiceFileConnections, Sort.By.SupplierInvoiceFileConnection>, ISupplierInvoiceFileConnectionConnector
-    {
+	public class SupplierInvoiceFileConnectionConnector : EntityConnector<SupplierInvoiceFileConnection, EntityCollection<SupplierInvoiceFileConnectionSubset>, Sort.By.SupplierInvoiceFileConnection?>, ISupplierInvoiceFileConnectionConnector
+	{
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string SupplierInvoiceNumber { get; set; }
 
 		/// <remarks/>
 		public SupplierInvoiceFileConnectionConnector()
 		{
-			base.Resource = "supplierinvoicefileconnections";
+			Resource = "supplierinvoicefileconnections";
 		}
 
 		/// <summary>
@@ -58,7 +60,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found supplier invoice file connection</returns>
 		public SupplierInvoiceFileConnection Get(string fileId)
 		{
-			return base.BaseGet(fileId);
+			return BaseGet(fileId);
 		}
 
 		/// <summary>
@@ -68,7 +70,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created supplier invoice file connection</returns>
 		public SupplierInvoiceFileConnection Create(SupplierInvoiceFileConnection supplierInvoiceFileConnection)
 		{
-			return base.BaseCreate(supplierInvoiceFileConnection);
+			return BaseCreate(supplierInvoiceFileConnection);
 		}
 
 		/// <summary>
@@ -77,16 +79,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="fileId">The id of the file to delete</param>
 		public void Delete(string fileId)
 		{
-			base.BaseDelete(fileId);
+			BaseDelete(fileId);
 		}
 
 		/// <summary>
 		/// Gets a list of supplier invoice file Connections
 		/// </summary>
 		/// <returns></returns>
-		public SupplierInvoiceFileConnections Find()
+		public EntityCollection<SupplierInvoiceFileConnectionSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

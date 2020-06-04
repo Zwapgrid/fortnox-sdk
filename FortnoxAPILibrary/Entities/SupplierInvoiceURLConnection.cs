@@ -1,21 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Serialization;
+using Newtonsoft.Json;
 
-namespace FortnoxAPILibrary
+// ReSharper disable UnusedMember.Global
+
+namespace FortnoxAPILibrary.Entities
 {
     /// <remarks/>
+    [Entity(SingularName = "SupplierInvoiceURLConnection")]
     public class SupplierInvoiceURLConnection
     {
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [System.ComponentModel.ReadOnly(true)]
-        public string Id { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Id { get; private set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string SupplierInvoiceNumber { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string URLConnection { get; set; }
     }
 }

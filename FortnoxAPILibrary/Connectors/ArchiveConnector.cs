@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
 using System;
-using System.Reflection;
-using Microsoft.AspNetCore.StaticFiles;
+using System.Collections.Generic;
+using System.IO;
+using FortnoxAPILibrary.Entities;
+using MimeTypes;
+using File = FortnoxAPILibrary.Entities.File;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
@@ -26,7 +30,7 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets at list of Files and Folders
         /// </summary>
         /// <returns>A list of Files and Folders</returns>
-        Folder Find(ArchiveConnector.RootFolder rootFolder = ArchiveConnector.RootFolder.Root);
+        Folder Find(RootFolder rootFolder = RootFolder.Root);
 
         /// <summary>
         /// Creates a folder.
@@ -91,7 +95,7 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-	public class ArchiveConnector : EntityConnector<Folder, Folder, Sort.By.Folder>, IArchiveConnector
+	public class ArchiveConnector : EntityConnector<Folder, EntityWrapper<Folder>, Sort.By.Folder>, IArchiveConnector
     {
 		/// <summary>
 		/// Use with Find() to limit the search result
@@ -103,11 +107,6 @@ namespace FortnoxAPILibrary.Connectors
 		/// </summary>
 		public string FolderId { get; set; }
 
-		///// <summary>
-		///// Use with Find() to limit the search result
-		///// </summary>
-		//public string Destination { get; set; }
-
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
@@ -116,112 +115,65 @@ namespace FortnoxAPILibrary.Connectors
 		/// <remarks/>
 		public ArchiveConnector()
 		{
-			base.Resource = "archive";
+			Resource = "archive";
 		}
-
+		
 		/// <summary>
-		/// Use this to set what folder to read from. 
-		/// </summary>
-		public enum RootFolder
-		{
-			/// <remarks/>
-			[RealValue("")]
-			Root,
-			/// <remarks/>
-			[RealValue("inbox")]
-			Inbox,
-			/// <remarks/>
-			[RealValue("inbox_v")]
-			Inbox_Vouchers,
-			/// <remarks/>
-			[RealValue("inbox_s")]
-			Inbox_SupplierInvoices
-
-		}
-
-		/// <summary>
-		/// Gets at list of Files and Folders
+		/// Gets a list of Files and Folders
 		/// </summary>
 		/// <returns>A list of Files and Folders</returns>
 		public Folder Find(RootFolder rootFolder = RootFolder.Root)
-		{
-            this.Parameters = new Dictionary<string, string>();
+        {
+            Parameters = new Dictionary<string, string>();
 
 			if (rootFolder == RootFolder.Root)
 			{
 				if (!string.IsNullOrWhiteSpace(Path))
 				{
-					this.Parameters.Add("path", this.Path);
+					Parameters.Add("path", Path);
 				}
 
 				if (!string.IsNullOrWhiteSpace(FolderId))
 				{
-					base.Resource += "/" + FolderId;
+					Resource = "archive/" + FolderId;
 				}
 				else if (!string.IsNullOrWhiteSpace(Id))
 				{
-					base.Resource += "/" + Id;
+					Resource = "archive/" + Id;
 				}
 			}
-			else if (rootFolder == RootFolder.Inbox)
-			{
-				base.Resource = "archive/" + GetRealValueFromAttribute(RootFolder.Inbox);
-			}
-			else if (rootFolder == RootFolder.Inbox_SupplierInvoices)
-			{
-				base.Resource = "archive/" + GetRealValueFromAttribute(RootFolder.Inbox_SupplierInvoices);
-			}
-			else if (rootFolder == RootFolder.Inbox_Vouchers)
-			{
-				base.Resource = "archive/" + GetRealValueFromAttribute(RootFolder.Inbox_Vouchers);	
-			}
+            else
+            {
+                Resource = "archive/" + rootFolder.GetStringValue();
+            }
 			
-			return base.BaseFind(this.Parameters);
+			return BaseFind(Parameters)?.Entity;
 		}
 
-		private static string GetRealValueFromAttribute(RootFolder f)
-		{
-			string resource = "";
-
-			Type type = f.GetType();
-			MemberInfo[] memInfo = type.GetMember(f.ToString());
-			object[] attrs = memInfo[0].GetCustomAttributes(typeof(RealValueAttribute), false);
-			if (attrs.Length > 0)
-			{
-				resource = ((RealValueAttribute)attrs[0]).RealValue;
-			}
-			return resource;
-		}
-
-		/// <summary>
+        /// <summary>
 		/// Creates a folder.
 		/// </summary>
 		/// <param name="folder">The folder entity to create</param>
-		/// <param name="destination">he id or path to the parent folder to create the folder in.</param>
+		/// <param name="destination">the id or path to the parent folder to create the folder in.</param>
 		/// <returns>The created folder.</returns>
 		public Folder CreateFolder(Folder folder, string destination = "")
 		{
-			base.Resource = "archive";
+			Resource = "archive";
 
-			Dictionary<string, string> parameters = new Dictionary<string, string>();
+			var parameters = new Dictionary<string, string>();
 
-			if (!String.IsNullOrWhiteSpace(destination))
+			if (!string.IsNullOrWhiteSpace(destination))
 			{
-				Guid test = new Guid();
-				if (Guid.TryParse(destination, out test))
-				{
-					parameters.Add("folderid", destination);
-				}
-				else
-				{
-					parameters.Add("path", destination);
-				}
-			}
+                if (IsFolderId(destination))
+                    parameters.Add("folderid", destination);
+                else
+                    parameters.Add("path", destination);
+            }
 
-			return base.BaseCreate(folder, parameters);
+			return BaseCreate(folder, parameters);
 		}
-
-		///<summary>
+        
+        ///<summary>
 		///Uploads a file to Fortnox
 		///</summary>
 		///<param name="localPath">The local path to the file to upload</param>
@@ -229,9 +181,9 @@ namespace FortnoxAPILibrary.Connectors
 		///<returns>Information of the uploaded file</returns>
 		public File UploadFile(string localPath, string folderId = "")
         {
-            base.Resource = "archive";
+            Resource = "archive";
 
-			return base.BaseUploadFile(localPath, folderId);
+			return BaseUploadFile(localPath, folderId);
 		}
 
 		/// <summary>
@@ -240,23 +192,23 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>Created file.</returns>
 		public File UploadFileData(byte[] data, string name, string folderId = "")
 		{
-			if (data == null) throw new ArgumentNullException("File data must be set.");
+			if (data == null) 
+                throw new ArgumentException("File data must be set.");
 
-			if (string.IsNullOrEmpty(name)) throw new ArgumentException("File name must be set.");
+			if (string.IsNullOrEmpty(name)) 
+                throw new ArgumentException("File name must be set.");
 
-			if (!System.IO.Path.HasExtension(name)) throw new ArgumentException("File name with extention must be set.");
+			if (!System.IO.Path.HasExtension(name)) 
+                throw new ArgumentException("File name with extention must be set.");
 
-			base.Resource = "archive";
+			Resource = "archive";
 
-			var uploadedFile = base.BaseUploadFile("", folderId, data, name);
+			var uploadedFile = BaseUploadFile("", folderId, data, name);
+            if (uploadedFile == null) return null;
 
-            var provider = new FileExtensionContentTypeProvider();
-            provider.TryGetContentType(name, out var contentType);
-            uploadedFile.ContentType = contentType;
-
+            uploadedFile.ContentType = GetMimeType(name);
             uploadedFile.Data = new byte[data.Length];
-
-			data.CopyTo(uploadedFile.Data, 0);
+            data.CopyTo(uploadedFile.Data, 0);
 
 			return uploadedFile;
 		}
@@ -265,12 +217,11 @@ namespace FortnoxAPILibrary.Connectors
 		/// Uploads a file to Fortnox Archive from provided data stream.
 		/// </summary>
 		/// <returns>Created file.</returns>
-		public File UploadFileData(System.IO.Stream stream, string name, string folderId = "")
+		public File UploadFileData(Stream stream, string name, string folderId = "")
 		{
 			stream.Position = 0;
-			var arr = new byte[stream.Length];
-			stream.Read(arr, 0, (int)stream.Length);
-			return this.UploadFileData(arr, name, folderId);
+            var arr = stream.ToBytes();
+			return UploadFileData(arr, name, folderId);
 		}
 
 		/// <summary>
@@ -280,7 +231,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="localPath">The local path to save the file to </param>
 		public void DownloadFile(string fileIdOrFilePath, string localPath)
         {
-            base.Resource = "archive";
+            Resource = "archive";
 
 			base.DownloadFile(fileIdOrFilePath, localPath);
 		}
@@ -292,18 +243,14 @@ namespace FortnoxAPILibrary.Connectors
 		public void DownloadFileData(File file)
 		{
 			if (file == null)
-			{
-				throw new ArgumentNullException("File must be set.");
-			}
+                throw new ArgumentException("File must be set.");
 
 			if (string.IsNullOrEmpty(file.Id))
-			{
-				throw new ArgumentException("File id must be set.");
-			}
+                throw new ArgumentException("File id must be set.");
 
-			base.Resource = "archive";
+            Resource = "archive";
 
-			base.DownloadFile(file.Id, "", file);
+			DownloadFile(file.Id, "", file);
 		}
 
 		/// <summary>
@@ -314,7 +261,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>Information about the file. </returns>
 		public new File MoveFile(string fileId, string destination)
         {
-            base.Resource = "archive";
+            Resource = "archive";
 
 			return base.MoveFile(fileId, destination);
 		}
@@ -325,7 +272,9 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="fileId">The id of the file to be deleted.</param>
 		public void DeleteFile(string fileId)
 		{
-			base.BaseDelete(fileId);
+            Resource = "archive";
+
+			BaseDelete(fileId);
 		}
 
 		/// <summary>
@@ -334,7 +283,52 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="folderId">The id of the folder to be deleted.</param>
 		public void DeleteFolder(string folderId)
 		{
-			base.BaseDelete(folderId);
+            Resource = "archive";
+
+			BaseDelete(folderId);
 		}
-	}
+
+        private static string GetMimeType(string name)
+        {
+            var extension = System.IO.Path.GetExtension(name);
+            return MimeTypeMap.GetMimeType(extension);
+        }
+
+        private static bool IsFolderId(string destination)
+        {
+            return Guid.TryParse(destination, out var unused);
+        }
+
+        private File BaseUploadFile(string localPath, string folderId, byte[] fileData = null, string fileName = null)
+        {
+            RequestUriString = GetUrl();
+
+            if (!string.IsNullOrWhiteSpace(folderId))
+            {
+                RequestUriString += "?folderid=" + Uri.EscapeDataString(folderId);
+            }
+
+            return UploadFile<File>(localPath, fileData, fileName);
+        }
+    }
+
+    /// <summary>
+    /// Use this to set what folder to read from. 
+    /// </summary>
+    public enum RootFolder
+    {
+        /// <remarks/>
+        [StringValue("")]
+        Root,
+        /// <remarks/>
+        [StringValue("inbox")]
+        Inbox,
+        /// <remarks/>
+        [StringValue("inbox_v")]
+        Inbox_Vouchers,
+        /// <remarks/>
+        [StringValue("inbox_s")]
+        Inbox_SupplierInvoices
+
+    }
 }

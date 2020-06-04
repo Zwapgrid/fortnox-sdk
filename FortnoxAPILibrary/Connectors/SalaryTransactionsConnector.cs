@@ -7,7 +7,7 @@ namespace FortnoxAPILibrary.Connectors
     /// <summary>
     /// Interface of connector to salary transactions endpoint
     /// </summary>
-    public interface ISalaryTransactionsConnector : IEntityConnector<Sort.By.SalaryTransaction>
+    public interface ISalaryTransactionsConnector : IEntityConnector<Sort.By.SalaryTransaction?>
     {
         /// <summary>
         /// Gets a salary transaction
@@ -34,7 +34,7 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of salary transactions
         /// </summary>
         /// <returns>A list of salary transactions</returns>
-        SalaryTransactions Find();
+        EntityCollection<SalaryTransactionSubset> Find();
 
         /// <summary>
         /// Deletes a salary transaction
@@ -46,7 +46,7 @@ namespace FortnoxAPILibrary.Connectors
     /// <summary>
     /// Implementation of connector to salary transactions endpoint
     /// </summary>
-    public class SalaryTransactionsConnector : EntityConnector<SalaryTransaction, SalaryTransactions, Sort.By.SalaryTransaction>, ISalaryTransactionsConnector
+    public class SalaryTransactionsConnector : EntityConnector<SalaryTransaction, EntityCollection<SalaryTransactionSubset>, Sort.By.SalaryTransaction?>, ISalaryTransactionsConnector
     {
         /// <inheritdoc />
         /// <summary>
@@ -79,7 +79,7 @@ namespace FortnoxAPILibrary.Connectors
         }
 
         /// <inheritdoc />
-        public SalaryTransactions Find()
+        public EntityCollection<SalaryTransactionSubset> Find()
         {
             return BaseFind();
         }

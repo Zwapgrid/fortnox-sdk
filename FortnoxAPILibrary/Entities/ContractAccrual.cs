@@ -1,59 +1,80 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Collections.Generic;
+using FortnoxAPILibrary.Serialization;
+using Newtonsoft.Json;
 
-namespace FortnoxAPILibrary
+// ReSharper disable UnusedMember.Global
+
+namespace FortnoxAPILibrary.Entities
 {
-	/// <remarks/>
-	public class ContractAccrual
+    /// <remarks/>
+    [Entity(SingularName = "ContractAccrual", PluralName = "ContractAccruals")]
+    public class ContractAccrual 
     {
-		private List<InvoiceAccrualRow> invoiceAccrualRowField;
-
 		/// <remarks/>
+		[JsonProperty]
 		public string AccrualAccount { get; set; }
 
 		/// <remarks/>
+		[JsonProperty]
 		public string CostAccount { get; set; }
 
 		/// <remarks/>
+		[JsonProperty]
 		public string Description { get; set; }
 
 		/// <remarks/>
-		[XmlArrayItemAttribute("InvoiceAccrualRow", IsNullable = false)]
-		public List<InvoiceAccrualRow> AccrualRows
-		{
-			get
-			{
-				return this.invoiceAccrualRowField;
-			}
-			set
-			{
-				this.invoiceAccrualRowField = value;
-			}
-		}
-
-		/// <remarks/>
-		public string DocumentNumber { get; set; }
-
-        /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string Period { get; set; }
+		[JsonProperty]
+		public List<InvoiceAccrualRow> AccrualRows { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
+        public string DocumentNumber { get; set; }
+
+        /// <summary>This field is Read-Only in Fortnox</summary>
+        [ReadOnly]
+        [JsonProperty]
+        public string Period { get; private set; }
+
+        /// <remarks/>
+        [JsonProperty]
         public string RevenueAccount { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [ReadOnly(true)]
-        public string Times { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string Times { get; private set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string Total { get; set; }
 
         /// <remarks/>
+        [JsonProperty]
         public string VATIncluded { get; set; }
 
         /// <summary>This field is Read-Only in Fortnox</summary>
-        [XmlAttributeAttribute, ReadOnly(true)]
-        public string url { get; set; }
+        [JsonProperty(PropertyName = "@url")]
+        public string Url { get; set; }
+    }
+
+    /// <remarks/>
+    [Entity(SingularName = "ContractAccrual", PluralName = "ContractAccruals")]
+    public class ContractAccrualSubSet
+    {
+        /// <remarks/>
+        [JsonProperty]
+        public string Description { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string InvoiceNumber { get; set; }
+
+        /// <remarks/>
+        [JsonProperty]
+        public string Period { get; set; }
+
+        /// <remarks/>
+        [JsonProperty(PropertyName = "@url")]
+        public string Url { get; set; }
     }
 }

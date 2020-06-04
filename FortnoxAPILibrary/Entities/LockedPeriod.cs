@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Serialization;
+using Newtonsoft.Json;
 
-namespace FortnoxAPILibrary
+// ReSharper disable UnusedMember.Global
+
+namespace FortnoxAPILibrary.Entities
 {
     /// <remarks/>
+    [Entity(SingularName = "LockedPeriod")]
     public class LockedPeriod
     {
         /// <remarks/>
-        [ReadOnly(true)]
-        public string EndDate { get; set; }
+        [ReadOnly]
+        [JsonProperty]
+        public string EndDate { get; private set; }
     }
 }

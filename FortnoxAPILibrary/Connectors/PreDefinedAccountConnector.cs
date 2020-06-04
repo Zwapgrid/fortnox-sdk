@@ -1,7 +1,11 @@
-﻿
+
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
+
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IPreDefinedAccountConnector : IFinancialYearBasedEntityConnector<PreDefinedAccount, PreDefinedAccounts, Sort.By.PreDefinedAccount>
+    public interface IPreDefinedAccountConnector : IFinancialYearBasedEntityConnector<PreDefinedAccount, EntityCollection<PreDefinedAccountSubset>, Sort.By.PreDefinedAccount?>
     {
         /// <summary>
         /// Gets a predefined account
@@ -21,16 +25,16 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of predefined accounts
         /// </summary>
         /// <returns>A list of predefined accounts</returns>
-        PreDefinedAccounts Find();
+        EntityCollection<PreDefinedAccountSubset> Find();
     }
 
     /// <remarks/>
-	public class PreDefinedAccountConnector : FinancialYearBasedEntityConnector<PreDefinedAccount, PreDefinedAccounts, Sort.By.PreDefinedAccount>, IPreDefinedAccountConnector
+	public class PreDefinedAccountConnector : FinancialYearBasedEntityConnector<PreDefinedAccount, EntityCollection<PreDefinedAccountSubset>, Sort.By.PreDefinedAccount?>, IPreDefinedAccountConnector
     {
 		/// <remarks/>
 		public PreDefinedAccountConnector()
 		{
-			base.Resource = "predefinedaccounts";
+			Resource = "predefinedaccounts";
 		}
 
 		/// <summary>
@@ -40,7 +44,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>a predefined account</returns>
 		public PreDefinedAccount Get(string name)
 		{
-			return base.BaseGet(name);
+			return BaseGet(name);
 		}
 
 		/// <summary>
@@ -50,16 +54,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated predefined account</returns>
 		public PreDefinedAccount Update(PreDefinedAccount preDefinedAccount)
 		{
-			return base.BaseUpdate(preDefinedAccount, preDefinedAccount.Name);
+			return BaseUpdate(preDefinedAccount, preDefinedAccount.Name);
 		}
 
 		/// <summary>
 		/// Gets a list of predefined accounts
 		/// </summary>
 		/// <returns>A list of predefined accounts</returns>
-		public PreDefinedAccounts Find()
+		public EntityCollection<PreDefinedAccountSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

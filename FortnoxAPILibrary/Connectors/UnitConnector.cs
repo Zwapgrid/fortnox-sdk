@@ -1,7 +1,11 @@
-﻿
+
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
+
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IUnitConnector : IEntityConnector<Sort.By.Unit>
+    public interface IUnitConnector : IEntityConnector<Sort.By.Unit?>
     {
         /// <summary>
         /// Gets a unit based on unit code
@@ -35,16 +39,16 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of units
         /// </summary>
         /// <returns>A list of units</returns>
-        Units Find();
+        EntityCollection<UnitSubset> Find();
     }
 
     /// <remarks/>
-	public class UnitConnector : EntityConnector<Unit, Units, Sort.By.Unit>, IUnitConnector
+	public class UnitConnector : EntityConnector<Unit, EntityCollection<UnitSubset>, Sort.By.Unit?>, IUnitConnector
     {
 		/// <remarks/>
 		public UnitConnector()
 		{
-			base.Resource = "units";
+			Resource = "units";
 		}
 
 		/// <summary>
@@ -54,7 +58,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found unit</returns>
 		public Unit Get(string unitCode)
 		{
-			return base.BaseGet(unitCode);
+			return BaseGet(unitCode);
 		}
 
 		/// <summary>
@@ -64,7 +68,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated unit</returns>
 		public Unit Update(Unit unit)
 		{
-			return base.BaseUpdate(unit, unit.Code);
+			return BaseUpdate(unit, unit.Code);
 		}
 
 		/// <summary>
@@ -74,7 +78,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created unit</returns>
 		public Unit Create(Unit unit)
 		{
-			return base.BaseCreate(unit);
+			return BaseCreate(unit);
 		}
 
 		/// <summary>
@@ -84,16 +88,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>If the unit was deleted or not.</returns>
 		public void Delete(string unitCode)
 		{
-			base.BaseDelete(unitCode);
+			BaseDelete(unitCode);
 		}
 
 		/// <summary>
 		/// Gets a list of units
 		/// </summary>
 		/// <returns>A list of units</returns>
-		public Units Find()
+		public EntityCollection<UnitSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

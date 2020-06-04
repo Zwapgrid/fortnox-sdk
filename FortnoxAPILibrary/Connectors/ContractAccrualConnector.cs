@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IContractAccrualConnector : IEntityConnector<Sort.By.ContractAccrual>
+    public interface IContractAccrualConnector : IEntityConnector<Sort.By.ContractAccrual?>
     {
         /// <summary>
         /// Get an contract accrual	
@@ -38,16 +37,16 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of contract accruals
         /// </summary>
         /// <returns>A list of contract accruals</returns>
-        ContractAccruals Find();
+        EntityCollection<ContractAccrualSubSet> Find();
     }
 
     /// <remarks/>
-    public class ContractAccrualConnector : EntityConnector<ContractAccrual, ContractAccruals, Sort.By.ContractAccrual>, IContractAccrualConnector
+    public class ContractAccrualConnector : EntityConnector<ContractAccrual, EntityCollection<ContractAccrualSubSet>, Sort.By.ContractAccrual?>, IContractAccrualConnector
     {
 		/// <remarks/>
         public ContractAccrualConnector()
 		{
-			base.Resource = "contractaccruals";
+			Resource = "contractaccruals";
 		}
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The found contract accrual</returns>
         public ContractAccrual Get(string contractNumber)
         {
-            return base.BaseGet(contractNumber);
+            return BaseGet(contractNumber);
         }
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The updated contract accrual</returns>
         public ContractAccrual Update(ContractAccrual contractAccrual)
         {
-            return base.BaseUpdate(contractAccrual, contractAccrual.DocumentNumber);
+            return BaseUpdate(contractAccrual, contractAccrual.DocumentNumber);
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The created contract accrual</returns>
         public ContractAccrual Create(ContractAccrual contractAccrual)
         {
-            return base.BaseCreate(contractAccrual);
+            return BaseCreate(contractAccrual);
         }
 
         /// <summary>
@@ -86,16 +85,16 @@ namespace FortnoxAPILibrary.Connectors
         /// <param name="contractNumber">The contract number of the contract accrual to delete</param>
         public void Delete(string contractNumber)
         {
-            base.BaseDelete(contractNumber);
+            BaseDelete(contractNumber);
         }
 
         /// <summary>
         /// Gets a list of contract accruals
         /// </summary>
         /// <returns>A list of contract accruals</returns>
-        public ContractAccruals Find()
+        public EntityCollection<ContractAccrualSubSet> Find()
         {
-            return base.BaseFind();
+            return BaseFind();
         }
     }
 }

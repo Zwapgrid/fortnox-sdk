@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
@@ -22,48 +18,20 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-    public abstract class FinancialYearBasedEntityConnector<E, C, S> : EntityConnector<E, C, S>, IFinancialYearBasedEntityConnector<E, C, S>
+    public abstract class FinancialYearBasedEntityConnector<TEntity, TEntityCollection, TSort> : EntityConnector<TEntity, TEntityCollection, TSort>, IFinancialYearBasedEntityConnector<TEntity, TEntityCollection, TSort> where TEntity : class
     {
-        private string financialYearDateValue;
-        private bool financialYearDateSet = false;
-
         /// <summary>
         /// <para>Use FinancialYearDate to select the financial year to use.</para>
         /// <para>If omitted the default financial year will be selected</para>
         /// </summary>
-        [FilterProperty]
-        public string FinancialYearDate
-        {
-            get
-            {
-                return this.financialYearDateValue;
-            }
-            set
-            {
-                this.financialYearDateValue = value;
-                this.financialYearDateSet = true;
-            }
-        }
-
-        private string financialYearIDValue;
-        private bool financialYearIDSet = false;
+        [SearchParameter]
+        public string FinancialYearDate { get; set; }
 
         /// <summary>
         /// <para>Use FinancialYearID to select the financial year to use.</para>
         /// <para>If omitted the default financial year will be selected</para>
         /// </summary>
-        [FilterProperty("financialyear")]
-        public string FinancialYearID
-        {
-            get
-            {
-                return this.financialYearIDValue;
-            }
-            set
-            {
-                this.financialYearIDValue = value;
-                this.financialYearIDSet = true;
-            }
-        }
+        [SearchParameter("financialyear")]
+        public string FinancialYearID { get; set; }
     }
 }

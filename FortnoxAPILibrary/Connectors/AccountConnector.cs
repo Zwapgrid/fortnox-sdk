@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IAccountConnector : IFinancialYearBasedEntityConnector<Sort.By.Account, Accounts, Sort.By.Account>
+    public interface IAccountConnector : IFinancialYearBasedEntityConnector<Account, EntityCollection<AccountSubset>, Sort.By.Account?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -42,55 +43,22 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets at list of accounts
         /// </summary>
         /// <returns>A list of accounts</returns>
-        Accounts Find();
+        EntityCollection<AccountSubset> Find();
     }
 
     /// <remarks/>
-	public class AccountConnector : FinancialYearBasedEntityConnector<Account, Accounts, Sort.By.Account>, IAccountConnector
-    {
-		/// <remarks/>
-		public enum CostCenterSettingsValue
-		{
-			/// <remarks/>
-			ALLOWED,
-			/// <remarks/>
-			NOTALLOWED,
-			/// <remarks/>
-			MANDATORY
-		}
-
-		/// <remarks/>
-		public enum ProjectSettingsValue
-		{
-			/// <remarks/>
-			ALLOWED,
-			/// <remarks/>
-			NOTALLOWED,
-			/// <remarks/>
-			MANDATORY
-		}
-
-		/// <remarks/>
-		public enum TransactionInfoSettingsValue
-		{
-			/// <remarks/>
-			ALLOWED,
-			/// <remarks/>
-			NOTALLOWED,
-			/// <remarks/>
-			MANDATORY
-		}
-
+    public class AccountConnector : FinancialYearBasedEntityConnector<Account, EntityCollection<AccountSubset>, Sort.By.Account?>, IAccountConnector
+	{
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string SRU { get; set; }
 
 		/// <remarks/>
 		public AccountConnector()
 		{
-			base.Resource = "accounts";
+			Resource = "accounts";
 		}
 
 		/// <summary>
@@ -100,7 +68,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found account</returns>
 		public Account Get(string accountNumber)
 		{
-			return base.BaseGet(accountNumber);
+			return BaseGet(accountNumber);
 		}
 
 		/// <summary>
@@ -110,7 +78,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated account</returns>
 		public Account Update(Account account)
 		{
-			return base.BaseUpdate(account, account.Number.ToString());
+			return BaseUpdate(account, account.Number);
 		}
 
 		/// <summary>
@@ -120,7 +88,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created account</returns>
 		public Account Create(Account account)
 		{
-			return base.BaseCreate(account);
+			return BaseCreate(account);
 		}
 
 		/// <summary>
@@ -130,16 +98,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>If the account was deleted or not</returns>
 		public void Delete(string accountNumber)
 		{
-			base.BaseDelete(accountNumber);
+			BaseDelete(accountNumber);
 		}
 
 		/// <summary>
 		/// Gets at list of accounts
 		/// </summary>
 		/// <returns>A list of accounts</returns>
-		public Accounts Find()
+		public EntityCollection<AccountSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

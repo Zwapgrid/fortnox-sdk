@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IArticleConnector : IEntityConnector<Sort.By.Article>
+    public interface IArticleConnector : IEntityConnector<Sort.By.Article?>
     {
         /// <remarks/>
-        Filter.Article FilterBy { get; set; }
+        Filter.Article? FilterBy { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
@@ -74,81 +76,62 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of articles
         /// </summary>
         /// <returns>A list of articles</returns>
-        Articles Find();
+        EntityCollection<ArticleSubset> Find();
     }
 
     /// <remarks/>
-	public class ArticleConnector : FinancialYearBasedEntityConnector<Article, Articles, Sort.By.Article>, IArticleConnector
-    {
-		private bool filterBySet = false;
-		private Filter.Article filterBy;
+    public class ArticleConnector : FinancialYearBasedEntityConnector<Article, EntityCollection<ArticleSubset>, Sort.By.Article?>, IArticleConnector
+	{
 		/// <remarks/>
-		[FilterProperty("filter")]
-		public Filter.Article FilterBy
-		{
-			get { return filterBy; }
-			set
-			{
-				filterBy = value;
-				filterBySet = true;
-			}
-		}
+		[SearchParameter("filter")]
+		public Filter.Article? FilterBy { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string ArticleNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string Description { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string EAN { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string SupplierNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string Manufacturer { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string ManufacturerArticleNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string Webshop { get; set; }
-
-		/// <remarks/>
-		public enum ArticleType
-		{
-			/// <remarks/>
-			STOCK,
-			/// <remarks/>
-			SERVICE
-		}
-
+        
 		/// <remarks/>
 		public ArticleConnector()
 		{
-			base.Resource = "articles";
+			Resource = "articles";
 		}
 
 		/// <summary>
@@ -158,7 +141,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found article</returns>
 		public Article Get(string articleNumber)
 		{
-			return base.BaseGet(articleNumber);
+			return BaseGet(articleNumber);
 		}
 
 		/// <summary>
@@ -168,7 +151,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated article</returns>
 		public Article Update(Article article)
 		{
-			return base.BaseUpdate(article, article.ArticleNumber);
+			return BaseUpdate(article, article.ArticleNumber);
 		}
 
 		/// <summary>
@@ -178,7 +161,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created article</returns>
 		public Article Create(Article article)
 		{
-			return base.BaseCreate(article);
+			return BaseCreate(article);
 		}
 
 		/// <summary>
@@ -188,16 +171,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>If the article was deleted or not</returns>
 		public void Delete(string articleNumber)
 		{
-			base.BaseDelete(articleNumber);
+			BaseDelete(articleNumber);
 		}
 
 		/// <summary>
 		/// Gets a list of articles
 		/// </summary>
 		/// <returns>A list of articles</returns>
-		public Articles Find()
+		public EntityCollection<ArticleSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

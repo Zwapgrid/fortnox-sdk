@@ -1,6 +1,8 @@
-﻿namespace FortnoxAPILibrary.Connectors
+using FortnoxAPILibrary.Entities;
+
+namespace FortnoxAPILibrary.Connectors
 {
-    public interface ITermsOfDeliveryConnector : IEntityConnector<Sort.By.TermsOfDelivery>
+    public interface ITermsOfDeliveryConnector : IEntityConnector<Sort.By.TermsOfDelivery?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -39,22 +41,22 @@
         /// Gets a list of terms of deliveries
         /// </summary>
         /// <returns>A list of terms of deliveries</returns>
-        TermsOfDeliveries Find();
+        EntityCollection<TermsOfDeliverySubset> Find();
     }
 
     /// <remarks/>
-	public class TermsOfDeliveryConnector : EntityConnector<TermsOfDelivery, TermsOfDeliveries, Sort.By.TermsOfDelivery>, ITermsOfDeliveryConnector
-    {
+    public class TermsOfDeliveryConnector : EntityConnector<TermsOfDelivery, EntityCollection<TermsOfDeliverySubset>, Sort.By.TermsOfDelivery?>, ITermsOfDeliveryConnector
+	{
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Code { get; set; }
 
 		/// <remarks/>
 		public TermsOfDeliveryConnector()
 		{
-			base.Resource = "termsofdeliveries";
+			Resource = "termsofdeliveries";
 		}
 
 		/// <summary>
@@ -64,7 +66,7 @@
 		/// <returns>The resulting terms of delivery</returns>
 		public TermsOfDelivery Get(string termsOfDeliveryCode)
 		{
-			return base.BaseGet(termsOfDeliveryCode);
+			return BaseGet(termsOfDeliveryCode);
 		}
 
 		/// <summary>
@@ -74,7 +76,7 @@
 		/// <returns>The updated terms of delivery</returns>
 		public TermsOfDelivery Update(TermsOfDelivery termsOfDelivery)
 		{
-			return base.BaseUpdate(termsOfDelivery, termsOfDelivery.Code);
+			return BaseUpdate(termsOfDelivery, termsOfDelivery.Code);
 		}
 
 		/// <summary>
@@ -84,7 +86,7 @@
 		/// <returns>The created terms of delivery</returns>
 		public TermsOfDelivery Create(TermsOfDelivery termsOfDelivery)
 		{
-			return base.BaseCreate(termsOfDelivery);
+			return BaseCreate(termsOfDelivery);
 		}
 
 
@@ -95,16 +97,16 @@
 		/// <returns>If the terms of delivery was deleted or not</returns>
 		public void Delete(string termsOfDeliveryCode)
 		{
-			base.BaseDelete(termsOfDeliveryCode);
+			BaseDelete(termsOfDeliveryCode);
 		}
 
 		/// <summary>
 		/// Gets a list of terms of deliveries
 		/// </summary>
 		/// <returns>A list of terms of deliveries</returns>
-		public TermsOfDeliveries Find()
+		public EntityCollection<TermsOfDeliverySubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

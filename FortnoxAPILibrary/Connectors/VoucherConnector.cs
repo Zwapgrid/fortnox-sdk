@@ -1,6 +1,8 @@
-﻿namespace FortnoxAPILibrary.Connectors
+﻿using FortnoxAPILibrary.Entities;
+
+namespace FortnoxAPILibrary.Connectors
 {
-    public interface IVoucherConnector : IFinancialYearBasedEntityConnector<Voucher, Vouchers, Sort.By.Voucher>
+    public interface IVoucherConnector : IFinancialYearBasedEntityConnector<Voucher, EntityCollection<VoucherSubset>, Sort.By.Voucher?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -41,11 +43,11 @@
         /// Gets a list of vouchers
         /// </summary>
         /// <returns>A list of vouchers</returns>
-        Vouchers Find();
+        EntityCollection<VoucherSubset> Find();
     }
 
     /// <remarks/>
-    public class VoucherConnector : FinancialYearBasedEntityConnector<Voucher, Vouchers, Sort.By.Voucher>, IVoucherConnector
+    public class VoucherConnector : FinancialYearBasedEntityConnector<Voucher, EntityCollection<VoucherSubset>, Sort.By.Voucher?>, IVoucherConnector
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -72,25 +74,25 @@
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string CostCenter { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string FromDate { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string ToDate { get; set; }
 
         /// <remarks/>
         public VoucherConnector()
         {
-            base.Resource = "vouchers";
+            Resource = "vouchers";
         }
 
         /// <summary>
@@ -101,9 +103,9 @@
         /// <returns>The found voucher</returns>
         public Voucher Get(string voucherSeries, string voucherNumber)
         {
-            base.Resource = "vouchers";
+            Resource = "vouchers";
 
-            return base.BaseGet(voucherSeries, voucherNumber);
+            return BaseGet(voucherSeries, voucherNumber);
         }
 
         /// <summary>
@@ -113,25 +115,25 @@
         /// <returns>The created voucher</returns>
         public Voucher Create(Voucher voucher)
         {
-            base.Resource = "vouchers";
+            Resource = "vouchers";
 
-            return base.BaseCreate(voucher);
+            return BaseCreate(voucher);
         }
 
         /// <summary>
         /// Gets a list of vouchers
         /// </summary>
         /// <returns>A list of vouchers</returns>
-        public Vouchers Find()
+        public EntityCollection<VoucherSubset> Find()
         {
-            base.Resource = "vouchers/sublist";
+            Resource = "vouchers/sublist";
 
-            if (!string.IsNullOrEmpty(this.VoucherSeries))
+            if (!string.IsNullOrEmpty(VoucherSeries))
             {
-                base.Resource += this.VoucherSeries;
+                Resource += VoucherSeries;
             }
 
-            return base.BaseFind();
+            return BaseFind();
         }
     }
 }

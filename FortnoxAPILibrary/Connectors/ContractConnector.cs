@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IContractConnector : IFinancialYearBasedEntityConnector<Contract, Contracts, Sort.By.Contract>
+    public interface IContractConnector : IFinancialYearBasedEntityConnector<Contract, EntityCollection<ContractSubset>, Sort.By.Contract>
     {
         /// <remarks/>
         string DocumentNumber { get; set; }
@@ -42,7 +40,7 @@ namespace FortnoxAPILibrary.Connectors
         string PeriodEnd { get; set; }
 
         /// <remarks/>
-        Filter.Contract FilterBy { get; set; }
+        Filter.Contract? FilterBy { get; set; }
 
         /// <summary>
         /// Find a Contract
@@ -69,7 +67,7 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets at list of Contracts
         /// </summary>
         /// <returns>A list of Contracts</returns>
-        Contracts Find();
+        EntityCollection<ContractSubset> Find();
 
         /// <summary>
         /// Finish a contract
@@ -94,69 +92,59 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-    public class ContractConnector : FinancialYearBasedEntityConnector<Contract, Contracts, Sort.By.Contract>, IContractConnector
+    public class ContractConnector : FinancialYearBasedEntityConnector<Contract, EntityCollection<ContractSubset>, Sort.By.Contract>, IContractConnector
     {
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string DocumentNumber { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string CustomerNumber { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string CustomerName { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string TemplateNumber { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string ContractLength { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string InvoiceInterval { get; set; }
 
         /// <remarks/>
         public string LastInvoiceDate { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string Total { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string InvoicesRemaining { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string PeriodStart { get; set; }
 
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string PeriodEnd { get; set; }
 
-        private bool filterBySet = false;
-        private Filter.Contract filterBy;
         /// <remarks/>
-        [FilterProperty("filter")]
-        public Filter.Contract FilterBy
-        {
-            get { return filterBy; }
-            set
-            {
-                filterBy = value;
-                filterBySet = true;
-            }
-        }
+        [SearchParameter("filter")]
+        public Filter.Contract? FilterBy { get; set; }
 
         /// <remarks/>
         public ContractConnector()
         {
-            base.Resource = "contracts";
+            Resource = "contracts";
         }
         
 		/// <summary>
@@ -166,7 +154,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found Contract</returns>
         public Contract Get(string documentNumber)
         {
-            return base.BaseGet(documentNumber);
+            return BaseGet(documentNumber);
         }
 
         /// <summary>
@@ -176,7 +164,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The updated Contract</returns>
         public Contract Update(Contract contract)
         {
-            return base.BaseUpdate(contract, contract.DocumentNumber);
+            return BaseUpdate(contract, contract.DocumentNumber);
         }
 
         /// <summary>
@@ -186,16 +174,16 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The created Contract</returns>
         public Contract Create(Contract contract)
         {
-            return base.BaseCreate(contract);
+            return BaseCreate(contract);
         }
 
         /// <summary>
         /// Gets at list of Contracts
         /// </summary>
         /// <returns>A list of Contracts</returns>
-        public Contracts Find()
+        public EntityCollection<ContractSubset> Find()
         {
-            return base.BaseFind();
+            return BaseFind();
         }
 
         /// <summary>
@@ -205,7 +193,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The finished contract</returns>
         public Contract Finish(string documentNumber)
         {
-            return base.DoAction(documentNumber, "finish");
+            return DoAction(documentNumber, "finish");
         }
 
         /// <summary>
@@ -215,7 +203,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The Contract that the Invoice was created from</returns>
         public Contract CreateInvoice(string documentNumber)
         {
-            return base.DoAction(documentNumber, "createinvoice");
+            return DoAction(documentNumber, "createinvoice");
         }
 
         /// <summary>
@@ -225,7 +213,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The Contract that the Invoice was created from</returns>
         public Contract IncreaseInvoiceCount(string documentNumber)
         {
-            return base.DoAction(documentNumber, "increaseinvoicecount");
+            return DoAction(documentNumber, "increaseinvoicecount");
         }
     }
 }

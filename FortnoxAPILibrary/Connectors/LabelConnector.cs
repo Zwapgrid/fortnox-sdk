@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+using FortnoxAPILibrary.Entities;
 
-namespace FortnoxAPILibrary.Connectors {
-    public interface ILabelConnector : IEntityConnector<Sort.By.Label>
+// ReSharper disable UnusedMember.Global
+
+namespace FortnoxAPILibrary.Connectors
+{
+    public interface ILabelConnector : IEntityConnector<Sort.By.Label?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -40,21 +43,21 @@ namespace FortnoxAPILibrary.Connectors {
         /// Gets a list of labels
         /// </summary>
         /// <returns>A list of labels</returns>
-        Labels Find();
+        EntityCollection<LabelSubset> Find();
     }
 
     /// <remarks/>
-    public class LabelConnector : EntityConnector<Label, Labels, Sort.By.Label>, ILabelConnector
+    public class LabelConnector : EntityConnector<Label, EntityCollection<LabelSubset>, Sort.By.Label?>, ILabelConnector
     {
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string Id { get; set; }
 
         /// <remarks/>
         public LabelConnector() {
-            base.Resource = "labels";
+            Resource = "labels";
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace FortnoxAPILibrary.Connectors {
         /// <param name="labelId"></param>
         /// <returns></returns>
         public Label Get(string labelId) {
-            return base.BaseGet(labelId);
+            return BaseGet(labelId);
         }
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace FortnoxAPILibrary.Connectors {
         /// <param name="label"></param>
         /// <returns></returns>
         public Label Update(Label label) {
-            return base.BaseUpdate(label, label.Id);
+            return BaseUpdate(label, label.Id);
         }
 
         /// <summary>
@@ -81,7 +84,7 @@ namespace FortnoxAPILibrary.Connectors {
         /// <param name="label">The label entity to create</param>
         /// <returns>The created label.</returns>
         public Label Create(Label label) {
-            return base.BaseCreate(label);
+            return BaseCreate(label);
         }
 
         /// <summary>
@@ -90,15 +93,15 @@ namespace FortnoxAPILibrary.Connectors {
         /// <param name="labelid">The label id to delete</param>
         /// <returns>If the label was deleted. </returns>
         public void Delete(string labelid) {
-            base.BaseDelete(labelid);
+            BaseDelete(labelid);
         }
 
         /// <summary>
         /// Gets a list of labels
         /// </summary>
         /// <returns>A list of labels</returns>
-        public Labels Find() {
-            return base.BaseFind();
+        public EntityCollection<LabelSubset> Find() {
+            return BaseFind();
         }
     }
 }

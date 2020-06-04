@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IOfferConnector : IFinancialYearBasedEntityConnector<Offer, Offers, Sort.By.Offer>
+    public interface IOfferConnector : IFinancialYearBasedEntityConnector<Offer, EntityCollection<OfferSubset>, Sort.By.Offer?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -57,15 +57,15 @@ namespace FortnoxAPILibrary.Connectors
         string Label { get; set; }
 
         /// <remarks/>
-        bool Sent { get; set; }
+        bool? Sent { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        bool NotCompleted { get; set; }
+        bool? NotCompleted { get; set; }
 
         /// <remarks/>
-        Filter.Offer FilterBy { get; set; }
+        Filter.Offer? FilterBy { get; set; }
 
         /// <summary>
         /// Gets an offer
@@ -92,7 +92,7 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of offers
         /// </summary>
         /// <returns>A list of offers</returns>
-        Offers Find();
+        EntityCollection<OfferSubset> Find();
 
         /// <summary>
         /// Cancel an offer
@@ -129,30 +129,30 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-	public class OfferConnector : FinancialYearBasedEntityConnector<Offer, Offers, Sort.By.Offer>, IOfferConnector
-    {
+    public class OfferConnector : FinancialYearBasedEntityConnector<Offer, EntityCollection<OfferSubset>, Sort.By.Offer?>, IOfferConnector
+	{
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string FromDate { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string ToDate { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string CostCenter { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string CustomerName { get; set; }
 
 		/// <summary>
@@ -163,96 +163,50 @@ namespace FortnoxAPILibrary.Connectors
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string DocumentNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string OurReference { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string Project { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		[FilterProperty]
+		[SearchParameter]
 		public string YourReference { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string Label { get; set; }
 
-
-		private bool sentSet = false;
-		private bool sent;
 		/// <remarks/>
-		[FilterProperty]
-		public bool Sent
-		{
-			get
-			{
-				return sent;
-			}
-			set
-			{
-				sent = value;
-				sentSet = true;
-			}
-		}
+		[SearchParameter]
+		public bool? Sent { get; set; }
 
-		private bool notCompletedSet = false;
-		private bool notcompleted;
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-		public bool NotCompleted
-		{
-			get
-			{
-				return notcompleted;
-			}
-			set
-			{
-				notcompleted = value;
-				notCompletedSet = true;
-			}
-		}
-
-		private bool filterBySet = false;
-		private Filter.Offer filterBy;
-		/// <remarks/>
-		[FilterProperty("filter")]
-		public Filter.Offer FilterBy
-		{
-			get { return filterBy; }
-			set
-			{
-				filterBy = value;
-				filterBySet = true;
-			}
-		}
+		public bool? NotCompleted { get; set; }
 
 		/// <remarks/>
-		public enum DiscountType
-		{
-			/// <remarks/>
-			AMOUNT,
-			/// <remarks/>
-			PERCENT
-		}
-
+		[SearchParameter("filter")]
+		public Filter.Offer? FilterBy { get; set; }
+        
 		/// <remarks/>
 		public OfferConnector()
 		{
-			base.Resource = "offers";
+			Resource = "offers";
 		}
 
 		/// <summary>
@@ -262,7 +216,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>An offer</returns>
 		public Offer Get(string documentNumber)
 		{
-			return base.BaseGet(documentNumber.ToString());
+			return BaseGet(documentNumber);
 		}
 
 		/// <summary>
@@ -272,7 +226,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated offer</returns>
 		public Offer Update(Offer offer)
 		{
-			return base.BaseUpdate(offer, offer.DocumentNumber.ToString());
+			return BaseUpdate(offer, offer.DocumentNumber);
 		}
 
 		/// <summary>
@@ -282,16 +236,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created offer</returns>
 		public Offer Create(Offer offer)
 		{
-			return base.BaseCreate(offer);
+			return BaseCreate(offer);
 		}
 
 		/// <summary>
 		/// Gets a list of offers
 		/// </summary>
 		/// <returns>A list of offers</returns>
-		public Offers Find()
+		public EntityCollection<OfferSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 
 		/// <summary>
@@ -301,7 +255,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The cancelled offer</returns>
 		public Offer Cancel(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "cancel");
+			return DoAction(documentNumber, "cancel");
 		}
 
 		/// <summary>
@@ -310,7 +264,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="documentNumber">The document number of the offer to be emailed</param>
 		public void Email(string documentNumber)
 		{
-			base.DoAction(documentNumber, "email");
+			DoAction(documentNumber, "email");
 		}
 
 		/// <summary>
@@ -322,12 +276,12 @@ namespace FortnoxAPILibrary.Connectors
 		{
 			if (string.IsNullOrEmpty(localPath))
 			{
-				base.DoAction(documentNumber, "externalprint");
+				DoAction(documentNumber, "externalprint");
 			}
 			else
 			{
-				base.LocalPath = localPath;
-				base.DoAction(documentNumber, "print");
+				LocalPath = localPath;
+				DoAction(documentNumber, "print");
 			}
 		}
 
@@ -337,7 +291,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <param name="documentNumber"></param>
         public void ExternalPrint(string documentNumber)
         {
-            base.DoAction(documentNumber, "externalprint");
+            DoAction(documentNumber, "externalprint");
         }
 
 		/// <summary>
@@ -347,7 +301,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns></returns>
 		public Offer CreateOrder(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "createorder");
+			return DoAction(documentNumber, "createorder");
 		}
 	}
 }

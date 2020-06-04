@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
     /// <inheritdoc />
-    public interface IVoucherFileConnectionConnector : IEntityConnector<Sort.By.VoucherFileConnection>
+    public interface IVoucherFileConnectionConnector : IEntityConnector<Sort.By.VoucherFileConnection?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -44,33 +47,33 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of VoucherFile Connections
         /// </summary>
         /// <returns></returns>
-        VoucherFileConnections Find();
+        EntityCollection<VoucherFileConnectionSubset> Find();
     }
 
-    public class VoucherFileConnectionConnector : EntityConnector<VoucherFileConnection, VoucherFileConnections, Sort.By.VoucherFileConnection>, IVoucherFileConnectionConnector
+    public class VoucherFileConnectionConnector : EntityConnector<VoucherFileConnection, EntityCollection<VoucherFileConnectionSubset>, Sort.By.VoucherFileConnection?>, IVoucherFileConnectionConnector
     {
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string VoucherDescription { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string VoucherNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string VoucherSeries { get; set; }
 
 		/// <remarks/>
 		public VoucherFileConnectionConnector()
 		{
-			base.Resource = "voucherfileconnections";
+			Resource = "voucherfileconnections";
 		}
 
 		/// <summary>
@@ -80,7 +83,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found voucher file connection</returns>
 		public VoucherFileConnection Get(string fileId)
 		{
-			return base.BaseGet(fileId);
+			return BaseGet(fileId);
 		}
 
 		/// <summary>
@@ -91,11 +94,11 @@ namespace FortnoxAPILibrary.Connectors
 		public VoucherFileConnection Create(VoucherFileConnection voucherFileConnection)
 		{
 		    var financialYear = voucherFileConnection.VoucherYear;
-		    voucherFileConnection.VoucherYear = null; //Read-only
 
 			return BaseCreate(voucherFileConnection, new Dictionary<string, string>
 			{
-			    { "financialyear", financialYear }
+			    { "financialyear", financialYear }, //backwards compatibility
+			    { "financialyeardate", financialYear }
 			});
 		}
 
@@ -105,16 +108,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="fileId"></param>
 		public void Delete(string fileId)
 		{
-			base.BaseDelete(fileId);
+			BaseDelete(fileId);
 		}
 
 		/// <summary>
 		/// Gets a list of VoucherFile Connections
 		/// </summary>
 		/// <returns></returns>
-		public VoucherFileConnections Find()
+		public EntityCollection<VoucherFileConnectionSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

@@ -1,32 +1,35 @@
-﻿
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
+
 namespace FortnoxAPILibrary.Connectors
 {
     /// <inheritdoc />
-    public interface IAccountChartConnector : IEntityConnector<Sort.By.AccountChart>
+    public interface IAccountChartConnector : IEntityConnector<Sort.By.AccountChart?>
     {
         /// <summary>
         /// Gets a list of account charts 
         /// </summary>
         /// <returns>A list of account charts</returns>
-        AccountCharts Find();
+        EntityCollection<AccountChartSubset> Find();
     }
 
     /// <remarks/>
-	public class AccountChartConnector : EntityConnector<AccountCharts, AccountCharts, Sort.By.AccountChart>, IAccountChartConnector
-    {
+    public class AccountChartConnector : EntityConnector<AccountChart, EntityCollection<AccountChartSubset>, Sort.By.AccountChart?>, IAccountChartConnector
+	{
         /// <remarks/>
         public AccountChartConnector()
         {
-            base.Resource = "accountcharts";
+            Resource = "accountcharts";
         }
 
 		/// <summary>
 		/// Gets a list of account charts 
 		/// </summary>
 		/// <returns>A list of account charts</returns>
-		public AccountCharts Find()
+		public EntityCollection<AccountChartSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

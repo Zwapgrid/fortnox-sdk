@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IInvoiceConnector : IFinancialYearBasedEntityConnector<Invoice, Invoices, Sort.By.Invoice>
+    public interface IInvoiceConnector : IFinancialYearBasedEntityConnector<Invoice, EntityCollection<InvoiceSubset>, Sort.By.Invoice>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -79,17 +79,17 @@ namespace FortnoxAPILibrary.Connectors
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        bool Sent { get; set; }
+        bool? Sent { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        bool NotCompleted { get; set; }
+        bool? NotCompleted { get; set; }
         
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        bool IsCredit { get; set; }
+        bool? IsCredit { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
@@ -99,10 +99,10 @@ namespace FortnoxAPILibrary.Connectors
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        InvoiceConnector.InvoiceType InvoiceTypeFilter { get; set; }
+        InvoiceType? InvoiceTypeFilter { get; set; }
 
         /// <remarks/>
-        Filter.Invoice FilterBy { get; set; }
+        Filter.Invoice? FilterBy { get; set; }
 
         /// <summary>
         /// Find an invoice
@@ -129,7 +129,7 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets at list of Invoices
         /// </summary>
         /// <returns>A list of invoices</returns>
-        Invoices Find();
+        EntityCollection<InvoiceSubset> Find();
 
         /// <summary>
         /// Bookkeep an invoice
@@ -190,221 +190,130 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-	public class InvoiceConnector : FinancialYearBasedEntityConnector<Invoice, Invoices, Sort.By.Invoice>, IInvoiceConnector
+    public class InvoiceConnector : FinancialYearBasedEntityConnector<Invoice, EntityCollection<InvoiceSubset>, Sort.By.Invoice>, IInvoiceConnector
     {
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string FromDate { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string ToDate { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string CostCenter { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string CustomerName { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string CustomerNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string DocumentNumber { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string ExternalInvoiceReference1 { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string ExternalInvoiceReference2 { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string OCR { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string OurReference { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string InvoiceDate { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Project { get; set; }
 
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string YourReference { get; set; }
 
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string Label { get; set; }
 
-		private bool sentSet = false;
-		private bool sent;
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
-		public bool Sent
-		{
-			get
-			{
-				return sent;
-			}
-			set
-			{
-				sent = value;
-				sentSet = true;
-			}
-		}
+        [SearchParameter]
+		public bool? Sent { get; set; }
 
-       private bool notCompletedSet = false;
-		private bool notcompleted;
 		/// <summary>
 		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
-		public bool NotCompleted
-		{
-			get
-			{
-				return notcompleted;
-			}
-			set
-			{
-				notcompleted = value;
-				notCompletedSet = true;
-			}
-		}
+        [SearchParameter]
+		public bool? NotCompleted { get; set; }
 
-        private bool isCreditSet = false;
-        private bool isCredit;
-        /// <summary>
-        /// Use with Find() to limit the search result
+		/// <summary>
+		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty("credit")]
-        public bool IsCredit
-        {
-            get
-            {
-                return isCredit;
-            }
-            set
-            {
-                isCredit = value;
-                isCreditSet = true;
-            }
-        }
+        [SearchParameter("credit")]
+		public bool? IsCredit { get; set; }
 
-        /// <summary>
-        /// Use with Find() to limit the search result
+		/// <summary>
+		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
-        public string YourOrderNumber { get; set; }
+        [SearchParameter]
+		public string YourOrderNumber { get; set; }
 
-        private bool invoiceTypeFilterSet = false;
-        private InvoiceType invoiceTypeFilter;
-        /// <summary>
-        /// Use with Find() to limit the search result
+		/// <summary>
+		/// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty("invoicetype")]
-        public InvoiceType InvoiceTypeFilter
-        {
-            get
-            {
-                return invoiceTypeFilter;
-            }
-            set
-            {
-                invoiceTypeFilter = value;
-                invoiceTypeFilterSet = true;
-            }
-        }
+        [SearchParameter("invoicetype")]
+		public InvoiceType? InvoiceTypeFilter { get; set; }
 
-        private bool filterBySet = false;
-		private Filter.Invoice filterBy;
         /// <remarks/>
-        [FilterProperty("filter")]
-		public Filter.Invoice FilterBy
-		{
-			get { return filterBy; }
-			set
-			{
-				filterBy = value;
-				filterBySet = true;
-			}
-		}
+        [SearchParameter("filter")]
+		public Filter.Invoice? FilterBy { get; set; }
 
-		/// <remarks/>
-		public enum DiscountType
-		{
-			/// <remarks/>
-			AMOUNT,
-			/// <remarks/>
-			PERCENT
-		}
-
-		/// <remarks/>
-		public enum InvoiceType
-		{
-            /// <remarks/>
-            [RealValue("invoice")]
-			INVOICE,
-            /// <remarks/>
-            [RealValue("cashinvoice")]
-			CASHINVOICE,
-            /// <remarks/>
-            [RealValue("intrestinvoice")]
-			INTRESTINVOICE,
-            /// <remarks/>
-            [RealValue("agreementinvoice")]
-			AGREEMENTINVOICE,
-            /// <remarks/>
-            [RealValue("summaryinvoice")]
-			SUMMARYINVOICE
-        }
-
-		/// <remarks/>
+        /// <remarks/>
 		public InvoiceConnector()
 		{
-			base.Resource = "invoices";
+			Resource = "invoices";
 		}
 
 		/// <summary>
@@ -414,7 +323,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found invoice</returns>
 		public Invoice Get(string documentNumber)
 		{
-			return base.BaseGet(documentNumber);
+			return BaseGet(documentNumber);
 		}
 
 		/// <summary>
@@ -424,7 +333,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated invoice</returns>
 		public Invoice Update(Invoice invoice)
 		{
-			return base.BaseUpdate(invoice, invoice.DocumentNumber);
+			return BaseUpdate(invoice, invoice.DocumentNumber);
 		}
 
 		/// <summary>
@@ -434,16 +343,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created invoice</returns>
 		public Invoice Create(Invoice invoice)
 		{
-			return base.BaseCreate(invoice);
+			return BaseCreate(invoice);
 		}
 
-		/// <summary>
-		/// Gets at list of Invoices
-		/// </summary>
-		/// <returns>A list of invoices</returns>
-		public Invoices Find()
+        /// <summary>
+        /// Gets at list of Invoices
+        /// </summary>
+        /// <returns>A list of invoices</returns>
+        public EntityCollection<InvoiceSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 
 		/// <summary>
@@ -453,7 +362,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The bookkept invoice</returns>
 		public Invoice Bookkeep(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "bookkeep");
+			return DoAction(documentNumber, "bookkeep");
 		}
 
 		/// <summary>
@@ -463,7 +372,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The cancelled invoice</returns>
 		public Invoice Cancel(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "cancel");
+			return DoAction(documentNumber, "cancel");
 		}
 
 		/// <summary>
@@ -473,7 +382,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The credited invoice</returns>
 		public Invoice Credit(string documentNumber)
 		{
-			return base.DoAction(documentNumber, "credit");
+			return DoAction(documentNumber, "credit");
 		}
 
 		/// <summary>
@@ -482,7 +391,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="documentNumber">The document number of the invoice to be emailed</param>
 		public void Email(string documentNumber)
 		{
-			base.DoAction(documentNumber, "email");
+			DoAction(documentNumber, "email");
 		}
 
 		/// <summary>
@@ -494,19 +403,19 @@ namespace FortnoxAPILibrary.Connectors
 		{
 			if (string.IsNullOrEmpty(localPath))
 			{
-				base.DoAction(documentNumber, "externalprint");
+				DoAction(documentNumber, "externalprint");
 			}
 			else
 			{
-				base.LocalPath = localPath;
-				base.DoAction(documentNumber, "print");
+				LocalPath = localPath;
+				DoAction(documentNumber, "print");
 			}
 		}
         
         /// <param name="documentNumber">The document number of the invoice to print</param>
         public void EPrint(string documentNumber)
         {
-            base.DoAction(documentNumber, "eprint");
+            DoAction(documentNumber, "eprint");
         }
 
 		/// <summary>
@@ -516,8 +425,8 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="localPath">The path where to save the reminder </param>
 		public void PrintReminder(string documentNumber, string localPath)
 		{
-			base.LocalPath = localPath;
-			base.DoAction(documentNumber, "printreminder");
+			LocalPath = localPath;
+			DoAction(documentNumber, "printreminder");
 		}
 
         /// <summary>
@@ -527,8 +436,8 @@ namespace FortnoxAPILibrary.Connectors
         /// <param name="localPath">The path where to save the preview</param>
         public void Preview(string documentNumber, string localPath)
         {
-            base.LocalPath = localPath;
-            base.DoAction(documentNumber, "preview");
+            LocalPath = localPath;
+            DoAction(documentNumber, "preview");
         }
 
         /// <summary>
@@ -537,7 +446,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <param name="documentNumber"></param>
         public void ExternalPrint(string documentNumber)
         {
-            base.DoAction(documentNumber, "externalprint");
+            DoAction(documentNumber, "externalprint");
         }
 	}
 }

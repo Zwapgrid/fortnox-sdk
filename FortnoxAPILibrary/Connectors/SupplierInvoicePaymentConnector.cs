@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface ISupplierInvoicePaymentConnector : IFinancialYearBasedEntityConnector<SupplierInvoicePayment, SupplierInvoicePayments, Sort.By.SupplierInvoicePayment>
+    public interface ISupplierInvoicePaymentConnector : IFinancialYearBasedEntityConnector<SupplierInvoicePayment, EntityCollection<SupplierInvoicePaymentSubset>, Sort.By.SupplierInvoicePayment?>
     {
         /// <remarks/>
         string InvoiceNumber { get; set; }
@@ -27,7 +26,7 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of supplier payments
         /// </summary>
         /// <returns>A list of payments</returns>
-        SupplierInvoicePayments Find();
+        EntityCollection<SupplierInvoicePaymentSubset> Find();
 
         /// <summary>
         /// Gets a supplier invoice payment based on supplier invoice payment number
@@ -44,16 +43,16 @@ namespace FortnoxAPILibrary.Connectors
     }
 
     /// <remarks/>
-	public class SupplierInvoicePaymentConnector : FinancialYearBasedEntityConnector<SupplierInvoicePayment, SupplierInvoicePayments, Sort.By.SupplierInvoicePayment>, ISupplierInvoicePaymentConnector
-    {
+    public class SupplierInvoicePaymentConnector : FinancialYearBasedEntityConnector<SupplierInvoicePayment, EntityCollection<SupplierInvoicePaymentSubset>, Sort.By.SupplierInvoicePayment?>, ISupplierInvoicePaymentConnector
+	{
         /// <remarks/>
-        [FilterProperty]
+        [SearchParameter]
         public string InvoiceNumber { get; set; }
 
 		/// <remarks/>
 		public SupplierInvoicePaymentConnector()
 		{
-			base.Resource = "supplierinvoicepayments";
+			Resource = "supplierinvoicepayments";
 		}
 
 		/// <summary>
@@ -63,26 +62,26 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created supplier invoice payment</returns>
 		public SupplierInvoicePayment Create(SupplierInvoicePayment supplierInvoicePayment)
 		{
-			return base.BaseCreate(supplierInvoicePayment);
+			return BaseCreate(supplierInvoicePayment);
 		}
 
         /// <summary>
-        /// Updates an supplier invoice payment
+        /// Updates a supplier invoice payment
         /// </summary>
         /// <param name="supplierInvoicePayment">The supplier invoice payment to update</param>
         /// <returns>The updated supplier invoice payment</returns>
         public SupplierInvoicePayment Update(SupplierInvoicePayment supplierInvoicePayment)
         {
-            return base.BaseUpdate(supplierInvoicePayment, supplierInvoicePayment.Number.ToString());
+            return BaseUpdate(supplierInvoicePayment, supplierInvoicePayment.Number);
         }
 
         /// <summary>
 		/// Gets a list of supplier payments
 		/// </summary>
 		/// <returns>A list of payments</returns>
-		public SupplierInvoicePayments Find()
+		public EntityCollection<SupplierInvoicePaymentSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>The found supplier invoice payment</returns>
         public SupplierInvoicePayment Get(string supplierInvoicePaymentNumber)
         {
-            return base.BaseGet(supplierInvoicePaymentNumber);
+            return BaseGet(supplierInvoicePaymentNumber);
         }
 
 		/// <summary>
@@ -101,7 +100,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="supplierInvoicePaymentNumber">The number of the supplier invoice payment to bookkeep.</param>
 		public void Bookkeep(string supplierInvoicePaymentNumber)
 		{
-			base.DoAction(supplierInvoicePaymentNumber, "bookkeep");
+			DoAction(supplierInvoicePaymentNumber, "bookkeep");
 		}
 	}
 }

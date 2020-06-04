@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface ISupplierInvoiceAccrualConnector : IEntityConnector<Sort.By.SupplierInvoiceAccrual>
+    public interface ISupplierInvoiceAccrualConnector : IEntityConnector<Sort.By.SupplierInvoiceAccrual?>
     {
         /// <summary>
         /// Get an supplierinvoice accrual	
@@ -38,33 +37,18 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of supplier invoice accruals
         /// </summary>
         /// <returns>A list of supplier invoice accruals</returns>
-        SupplierInvoiceAccruals Find();
+        EntityCollection<SupplierInvoiceAccrualSubset> Find();
     }
 
     /// <remarks/>
-	public class SupplierInvoiceAccrualConnector : EntityConnector<SupplierInvoiceAccrual, SupplierInvoiceAccruals, Sort.By.SupplierInvoiceAccrual>, ISupplierInvoiceAccrualConnector
-    {
+    public class SupplierInvoiceAccrualConnector : EntityConnector<SupplierInvoiceAccrual, EntityCollection<SupplierInvoiceAccrualSubset>, Sort.By.SupplierInvoiceAccrual?>, ISupplierInvoiceAccrualConnector
+	{
 		/// <remarks/>
 		public SupplierInvoiceAccrualConnector()
 		{
-			base.Resource = "supplierinvoiceaccruals";
+			Resource = "supplierinvoiceaccruals";
 		}
-
-		/// <remarks/>
-		public enum Period
-		{
-			/// <remarks/>
-			MONTHLY,
-			/// <remarks/>
-			BIMONTHLY,
-			/// <remarks/>
-			QUARTERLY,
-			/// <remarks/>
-			SEMIANNUALLY,
-			/// <remarks/>
-			ANNUALLY
-		}
-
+        
 		/// <summary>
 		/// Get an supplierinvoice accrual	
 		/// </summary>
@@ -72,7 +56,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found supplier invoice accrual</returns>
 		public SupplierInvoiceAccrual Get(string supplierInvoiceNumber)
 		{
-			return base.BaseGet(supplierInvoiceNumber);
+			return BaseGet(supplierInvoiceNumber);
 		}
 
 		///<summary>
@@ -82,7 +66,7 @@ namespace FortnoxAPILibrary.Connectors
 		///<returns>The updated supplier invoice accrual</returns>
 		public SupplierInvoiceAccrual Update(SupplierInvoiceAccrual invoiceAccrual)
 		{
-			return base.BaseUpdate(invoiceAccrual, invoiceAccrual.SupplierInvoiceNumber);
+			return BaseUpdate(invoiceAccrual, invoiceAccrual.SupplierInvoiceNumber);
 		}
 
 		/// <summary>
@@ -92,7 +76,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created supplierinvoice accrual</returns>
 		public SupplierInvoiceAccrual Create(SupplierInvoiceAccrual supplierInvoiceAccrual)
 		{
-			return base.BaseCreate(supplierInvoiceAccrual);
+			return BaseCreate(supplierInvoiceAccrual);
 		}
 
 		/// <summary>
@@ -101,16 +85,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <param name="supplierInvoiceNumber">The invoice number of the supplier invoice accrual to delete</param>
 		public void Delete(string supplierInvoiceNumber)
 		{
-			base.BaseDelete(supplierInvoiceNumber);
+			BaseDelete(supplierInvoiceNumber);
 		}
 
 		/// <summary>
 		/// Gets a list of supplier invoice accruals
 		/// </summary>
 		/// <returns>A list of supplier invoice accruals</returns>
-		public SupplierInvoiceAccruals Find()
+		public EntityCollection<SupplierInvoiceAccrualSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

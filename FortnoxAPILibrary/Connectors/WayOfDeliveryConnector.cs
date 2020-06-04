@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IWayOfDeliveryConnector : IEntityConnector<Sort.By.WayOfDelivery>
+    public interface IWayOfDeliveryConnector : IEntityConnector<Sort.By.WayOfDelivery?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -41,22 +43,22 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of way of deliveries
         /// </summary>
         /// <returns>A list of way of deliveries</returns>
-        WayOfDeliveries Find();
+        EntityCollection<WayOfDeliverySubset> Find();
     }
 
     /// <remarks/>
-	public class WayOfDeliveryConnector : EntityConnector<WayOfDelivery, WayOfDeliveries, Sort.By.WayOfDelivery>, IWayOfDeliveryConnector
-    {
+    public class WayOfDeliveryConnector : EntityConnector<WayOfDelivery, EntityCollection<WayOfDeliverySubset>, Sort.By.WayOfDelivery?>, IWayOfDeliveryConnector
+	{
 		/// <summary>
 		/// Use with Find() to limit the search result
 		/// </summary>
-        [FilterProperty]
+        [SearchParameter]
 		public string Code { get; set; }
 
 		/// <remarks/>
 		public WayOfDeliveryConnector()
 		{
-			base.Resource = "wayofdeliveries";
+			Resource = "wayofdeliveries";
 		}
 
 		/// <summary>
@@ -66,7 +68,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The resulting way of deliverycode</returns>
 		public WayOfDelivery Get(string wayOfDeliveryCode)
 		{
-			return base.BaseGet(wayOfDeliveryCode);
+			return BaseGet(wayOfDeliveryCode);
 		}
 
 		/// <summary>
@@ -76,7 +78,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated way of delivery</returns>
 		public WayOfDelivery Update(WayOfDelivery wayOfDelivery)
 		{
-			return base.BaseUpdate(wayOfDelivery, wayOfDelivery.Code);
+			return BaseUpdate(wayOfDelivery, wayOfDelivery.Code);
 		}
 
 		/// <summary>
@@ -86,7 +88,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created way of delivery</returns>
 		public WayOfDelivery Create(WayOfDelivery wayOfDelivery)
 		{
-			return base.BaseCreate(wayOfDelivery);
+			return BaseCreate(wayOfDelivery);
 		}
 
 		/// <summary>
@@ -96,16 +98,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>If the way of delivery was deleted or not</returns>
 		public void Delete(string wayOfDeliveryCode)
 		{
-			base.BaseDelete(wayOfDeliveryCode);
+			BaseDelete(wayOfDeliveryCode);
 		}
 
-		/// <summary>
-		/// Gets a list of way of deliveries
-		/// </summary>
-		/// <returns>A list of way of deliveries</returns>
-		public WayOfDeliveries Find()
+        /// <summary>
+        /// Gets a list of way of deliveries
+        /// </summary>
+        /// <returns>A list of way of deliveries</returns>
+        public EntityCollection<WayOfDeliverySubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

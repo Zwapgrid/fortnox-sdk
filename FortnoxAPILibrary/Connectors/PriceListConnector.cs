@@ -1,7 +1,10 @@
-﻿
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
+
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface IPriceListConnector : IEntityConnector<Sort.By.PriceList>
+    public interface IPriceListConnector : IEntityConnector<Sort.By.PriceList?>
     {
         /// <summary>
         /// Gets a price list 
@@ -28,16 +31,16 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of price lists
         /// </summary>
         /// <returns>A list of price lists</returns>
-        PriceLists Find();
+        EntityCollection<PriceListSubset> Find();
     }
 
     /// <remarks/>
-	public class PriceListConnector : EntityConnector<PriceList, PriceLists, Sort.By.PriceList>, IPriceListConnector
+	public class PriceListConnector : EntityConnector<PriceList, EntityCollection<PriceListSubset>, Sort.By.PriceList?>, IPriceListConnector
     {
 		/// <remarks/>
 		public PriceListConnector()
 		{
-			base.Resource = "pricelists";
+			Resource = "pricelists";
 		}
 
 		/// <summary>
@@ -47,7 +50,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found price list</returns>
 		public PriceList Get(string code)
 		{
-			return base.BaseGet(code);
+			return BaseGet(code);
 		}
 
 		/// <summary>
@@ -57,7 +60,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated price list</returns>
 		public PriceList Update(PriceList priceList)
 		{
-			return base.BaseUpdate(priceList, priceList.Code);
+			return BaseUpdate(priceList, priceList.Code);
 		}
 
 		/// <summary>
@@ -67,16 +70,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created price list</returns>
 		public PriceList Create(PriceList priceList)
 		{
-			return base.BaseCreate(priceList);
+			return BaseCreate(priceList);
 		}
 
 		/// <summary>
 		/// Gets a list of price lists
 		/// </summary>
 		/// <returns>A list of price lists</returns>
-		public PriceLists Find()
+		public EntityCollection<PriceListSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

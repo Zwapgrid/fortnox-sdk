@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
 
 namespace FortnoxAPILibrary.Connectors
 {
     /// <inheritdoc />
-    public interface IVoucherSeriesConnector : IFinancialYearBasedEntityConnector<VoucherSeries, VoucherSeriesCollection, Sort.By.VoucherSeries>
+    public interface IVoucherSeriesConnector : IFinancialYearBasedEntityConnector<VoucherSeries, EntityCollection<VoucherSeriesSubset>, Sort.By.VoucherSeries?>
     {
         /// <summary>
         /// Find a Voucher series by code
@@ -33,16 +32,16 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets a list of voucher series
         /// </summary>
         /// <returns>A list of voucher series</returns>
-        VoucherSeriesCollection Find();
+        EntityCollection<VoucherSeriesSubset> Find();
     }
 
     /// <remarks/>
-	public class VoucherSeriesConnector : FinancialYearBasedEntityConnector<VoucherSeries, VoucherSeriesCollection, Sort.By.VoucherSeries>, IVoucherSeriesConnector
-    {
+    public class VoucherSeriesConnector : FinancialYearBasedEntityConnector<VoucherSeries, EntityCollection<VoucherSeriesSubset>, Sort.By.VoucherSeries?>, IVoucherSeriesConnector
+	{
 		/// <remarks/>
 		public VoucherSeriesConnector()
 		{
-			base.Resource = "voucherseries";
+			Resource = "voucherseries";
 		}
 
 		/// <summary>
@@ -52,7 +51,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The found voucher series</returns>
 		public VoucherSeries Get(string code)
 		{
-			return base.BaseGet(code);
+			return BaseGet(code);
 		}
 
 		/// <summary>
@@ -63,7 +62,7 @@ namespace FortnoxAPILibrary.Connectors
 		public VoucherSeries Update(VoucherSeries voucherSeries)
 		{
 
-			return base.BaseUpdate(voucherSeries, voucherSeries.Code);
+			return BaseUpdate(voucherSeries, voucherSeries.Code);
 		}
 
 		/// <summary>
@@ -73,16 +72,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created voucher series</returns>
 		public VoucherSeries Create(VoucherSeries voucherseries)
 		{
-			return base.BaseCreate(voucherseries);
+			return BaseCreate(voucherseries);
 		}
 
 		/// <summary>
 		/// Gets a list of voucher series
 		/// </summary>
 		/// <returns>A list of voucher series</returns>
-		public VoucherSeriesCollection Find()
+		public EntityCollection<VoucherSeriesSubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

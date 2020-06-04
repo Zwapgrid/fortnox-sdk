@@ -1,7 +1,11 @@
-﻿
+
+using FortnoxAPILibrary.Entities;
+
+// ReSharper disable UnusedMember.Global
+
 namespace FortnoxAPILibrary.Connectors
 {
-    public interface ICurrencyConnector : IEntityConnector<Sort.By.Currency>
+    public interface ICurrencyConnector : IEntityConnector<Sort.By.Currency?>
     {
         /// <summary>
         /// Gets a currency based on currency code
@@ -35,16 +39,16 @@ namespace FortnoxAPILibrary.Connectors
         /// Gets at list of currencies
         /// </summary>
         /// <returns>A list of currencies</returns>
-        Currencies Find();
+        EntityCollection<CurrencySubset> Find();
     }
 
     /// <remarks/>
-	public class CurrencyConnector : EntityConnector<Currency, Currencies, Sort.By.Currency>, ICurrencyConnector
+	public class CurrencyConnector : EntityConnector<Currency, EntityCollection<CurrencySubset>, Sort.By.Currency?>, ICurrencyConnector
     {
 		/// <remarks/>
 		public CurrencyConnector()
 		{
-			base.Resource = "currencies";
+			Resource = "currencies";
 		}
 
 		/// <summary>
@@ -54,7 +58,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns></returns>
 		public Currency Get(string currencyCode)
 		{
-			return base.BaseGet(currencyCode);
+			return BaseGet(currencyCode);
 		}
 
 		/// <summary>
@@ -64,7 +68,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The updated currency entity</returns>
 		public Currency Update(Currency currency)
 		{
-			return base.BaseUpdate(currency, currency.Code);
+			return BaseUpdate(currency, currency.Code);
 		}
 
 		/// <summary>
@@ -74,7 +78,7 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>The created currency entity</returns>
 		public Currency Create(Currency currency)
 		{
-			return base.BaseCreate(currency);
+			return BaseCreate(currency);
 		}
 
 		/// <summary>
@@ -84,16 +88,16 @@ namespace FortnoxAPILibrary.Connectors
 		/// <returns>If the currency was deleted or not</returns>
 		public void Delete(string currencyCode)
 		{
-			base.BaseDelete(currencyCode);
+			BaseDelete(currencyCode);
 		}
 
 		/// <summary>
 		/// Gets at list of currencies
 		/// </summary>
 		/// <returns>A list of currencies</returns>
-		public Currencies Find()
+		public EntityCollection<CurrencySubset> Find()
 		{
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }

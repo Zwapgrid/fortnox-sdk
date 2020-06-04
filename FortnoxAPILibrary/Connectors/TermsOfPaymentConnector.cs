@@ -1,6 +1,8 @@
-﻿namespace FortnoxAPILibrary.Connectors
+﻿using FortnoxAPILibrary.Entities;
+
+namespace FortnoxAPILibrary.Connectors
 {
-    public interface ITermsOfPaymentConnector : IEntityConnector<Sort.By.TermsOfPayment>
+    public interface ITermsOfPaymentConnector : IEntityConnector<Sort.By.TermsOfPayment?>
     {
         /// <summary>
         /// Use with Find() to limit the search result
@@ -39,22 +41,22 @@
         /// Gets a list of terms of payments
         /// </summary>
         /// <returns>A list of terms of payments</returns>
-        TermsOfPayments Find();
+        EntityCollection<TermsOfPaymentSubset> Find();
     }
 
     /// <remarks/>
-	public class TermsOfPaymentConnector : EntityConnector<TermsOfPayment, TermsOfPayments, Sort.By.TermsOfPayment>, ITermsOfPaymentConnector
+    public class TermsOfPaymentConnector : EntityConnector<TermsOfPayment, EntityCollection<TermsOfPaymentSubset>, Sort.By.TermsOfPayment?>, ITermsOfPaymentConnector
     {
         /// <summary>
         /// Use with Find() to limit the search result
         /// </summary>
-        [FilterProperty]
+        [SearchParameter]
         public string Code { get; set; }
 
 		/// <remarks/>
 		public TermsOfPaymentConnector()
 		{
-			base.Resource = "termsofpayments";
+			Resource = "termsofpayments";
 		}
 
 		/// <summary>
@@ -64,7 +66,7 @@
 		/// <returns></returns>
 		public TermsOfPayment Get(string termsOfPaymentCode)
 		{
-			return base.BaseGet(termsOfPaymentCode);
+			return BaseGet(termsOfPaymentCode);
 		}
 
 		/// <summary>
@@ -74,7 +76,7 @@
 		/// <returns></returns>
 		public TermsOfPayment Update(TermsOfPayment termsOfPayment)
 		{
-			return base.BaseUpdate(termsOfPayment, termsOfPayment.Code);
+			return BaseUpdate(termsOfPayment, termsOfPayment.Code);
 		}
 
 		/// <summary>
@@ -84,7 +86,7 @@
 		/// <returns>The created terms of payment.</returns>
 		public TermsOfPayment Create(TermsOfPayment termsOfPayment)
 		{
-			return base.BaseCreate(termsOfPayment);
+			return BaseCreate(termsOfPayment);
 		}
 
 		/// <summary>
@@ -94,16 +96,16 @@
 		/// <returns>If the terms of payment was deleted. </returns>
 		public void Delete(string termsOfPaymentCode)
 		{
-			base.BaseDelete(termsOfPaymentCode);
+			BaseDelete(termsOfPaymentCode);
 		}
 
 		/// <summary>
 		/// Gets a list of terms of payments
 		/// </summary>
 		/// <returns>A list of terms of payments</returns>
-		public TermsOfPayments Find()
+		public EntityCollection<TermsOfPaymentSubset> Find()
         {
-			return base.BaseFind();
+			return BaseFind();
 		}
 	}
 }
