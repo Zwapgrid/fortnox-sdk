@@ -79,7 +79,7 @@ namespace FortnoxAPILibrary.Connectors
         /// <param name="fileId">The id of the file to be moved</param>
         /// <param name="destination">The id or path to the folder to move the file to.</param>
         /// <returns>Information about the file. </returns>
-        new File MoveFile(string fileId, string destination);
+        File MoveFile(string fileId, string destination);
 
         /// <summary>
         /// Deletes a file from Fortnox Archive.
@@ -296,7 +296,7 @@ namespace FortnoxAPILibrary.Connectors
 
         private static bool IsFolderId(string destination)
         {
-            return Guid.TryParse(destination, out var unused);
+            return Guid.TryParse(destination, out _);
         }
 
         private File BaseUploadFile(string localPath, string folderId, byte[] fileData = null, string fileName = null)
