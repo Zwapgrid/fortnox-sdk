@@ -30,6 +30,7 @@ namespace FortnoxAPILibrary.Tests.Connectors
             var firstInvoiceDate = DateTime.Parse(supplierInvoices.First().InvoiceDate);
             var lastInvoiceDate = DateTime.Parse(supplierInvoices.Last().InvoiceDate);
             Assert.IsTrue(firstInvoiceDate > lastInvoiceDate);
+            Assert.IsTrue(supplierInvoices.First().Credit == "true" || supplierInvoices.First().Credit == "false");
 
             _connector.SortOrder = Sort.Order.Ascending;
             supplierInvoices = _connector.Find().SupplierInvoiceSubset;
