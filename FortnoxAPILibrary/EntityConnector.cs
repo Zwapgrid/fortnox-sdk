@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -165,11 +166,11 @@ namespace FortnoxAPILibrary
         public int Offset { get; set; }
 
         /// <remarks/>
-        protected Dictionary<string, string> Parameters = new Dictionary<string, string>();
+        protected ConcurrentDictionary<string, string> Parameters = new ConcurrentDictionary<string, string>();
 
-        internal TEntity BaseCreate(TEntity entity, Dictionary<string, string> parameters = null)
+        internal TEntity BaseCreate(TEntity entity, ConcurrentDictionary<string, string> parameters = null)
         {
-            this.Parameters = parameters == null ? new Dictionary<string, string>() : parameters;
+            this.Parameters = parameters ?? new ConcurrentDictionary<string, string>();
 
             string requestUriString = this.GetUrl();
 
@@ -188,7 +189,7 @@ namespace FortnoxAPILibrary
 
         internal TEntity BaseUpdate(TEntity entity, params string[] indices)
         {
-            this.Parameters = new Dictionary<string, string>();
+            this.Parameters = new ConcurrentDictionary<string, string>();
 
             string searchValue = String.Join("/", indices.Select(i => HttpUtility.UrlEncode(i)));
 
@@ -209,7 +210,7 @@ namespace FortnoxAPILibrary
 
         internal void BaseDelete(string index)
         {
-            this.Parameters = new Dictionary<string, string>();
+            this.Parameters = new ConcurrentDictionary<string, string>();
 
             string requestUriString = this.GetUrl(index);
 
@@ -224,7 +225,7 @@ namespace FortnoxAPILibrary
 
         internal TEntity BaseGet(params string[] indices)
         {
-            this.Parameters = new Dictionary<string, string>();
+            this.Parameters = new ConcurrentDictionary<string, string>();
 
             this.AddCustomParameters();
 
@@ -246,9 +247,9 @@ namespace FortnoxAPILibrary
             return base.DoRequest<TEntity>();
         }
 
-        internal TCollection BaseFind(Dictionary<string, string> parameters = null)
+        internal TCollection BaseFind(ConcurrentDictionary<string, string> parameters = null)
         {
-            this.Parameters = parameters == null ? new Dictionary<string, string>() : parameters;
+            this.Parameters = parameters ?? new ConcurrentDictionary<string, string>();
 
             this.AddCustomParameters();
 
@@ -256,29 +257,29 @@ namespace FortnoxAPILibrary
 
             if (this.Limit != 0)
             {
-                this.Parameters.Add("limit", this.Limit.ToString());
+                this.Parameters.TryAdd("limit", this.Limit.ToString());
             }
 
             if (this.LastModified != DateTime.MinValue)
             {
                 
-                this.Parameters.Add("lastmodified", this.LastModified.ToString("yyyy-MM-dd HH:mm:ss"));
+                this.Parameters.TryAdd("lastmodified", this.LastModified.ToString("yyyy-MM-dd HH:mm:ss"));
             }
 
             if (this.SortByRealValue != null)
             {
-                this.Parameters.Add("sortby", this.SortByRealValue);
-                this.Parameters.Add("sortorder", this.SortOrder.ToString().ToLower());
+                this.Parameters.TryAdd("sortby", this.SortByRealValue);
+                this.Parameters.TryAdd("sortorder", this.SortOrder.ToString().ToLower());
             }
 
             if (this.Page != 0)
             {
-                this.Parameters.Add("page", this.Page.ToString());
+                this.Parameters.TryAdd("page", this.Page.ToString());
             }
 
             if (this.Offset != 0)
             {
-                this.Parameters.Add("offset", this.Offset.ToString());
+                this.Parameters.TryAdd("offset", this.Offset.ToString());
             }
 
             requestUriString = this.AddParameters(requestUriString);
@@ -356,7 +357,7 @@ namespace FortnoxAPILibrary
                     }
                 }
 
-                this.Parameters.Add(propertyName.ToLower(), strValue);
+                this.Parameters.TryAdd(propertyName.ToLower(), strValue);
             }
         }
 

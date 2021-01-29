@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.StaticFiles;
@@ -133,13 +134,13 @@ namespace FortnoxAPILibrary.Connectors
         /// <returns>A list of Files and Folders</returns>
         public Folder Find(InboxFolder inboxFolder = InboxFolder.Root)
         {
-            this.Parameters = new Dictionary<string, string>();
+            this.Parameters = new ConcurrentDictionary<string, string>();
 
             if (inboxFolder == InboxFolder.Root)
             {
                 if (!string.IsNullOrWhiteSpace(Path))
                 {
-                    this.Parameters.Add("path", this.Path);
+                    this.Parameters.TryAdd("path", this.Path);
                 }
 
                 if (!string.IsNullOrWhiteSpace(FolderId))

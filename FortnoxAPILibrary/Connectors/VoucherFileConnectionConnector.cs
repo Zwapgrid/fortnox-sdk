@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace FortnoxAPILibrary.Connectors
 {
@@ -93,10 +94,10 @@ namespace FortnoxAPILibrary.Connectors
 		    var financialYear = voucherFileConnection.VoucherYear;
 		    voucherFileConnection.VoucherYear = null; //Read-only
 
-			return BaseCreate(voucherFileConnection, new Dictionary<string, string>
-			{
-			    { "financialyear", financialYear }
-			});
+		    var parameters =  new ConcurrentDictionary<string, string>();
+		    parameters.TryAdd("financialyear", financialYear);
+		    
+		    return BaseCreate(voucherFileConnection, parameters);
 		}
 
 		/// <summary>

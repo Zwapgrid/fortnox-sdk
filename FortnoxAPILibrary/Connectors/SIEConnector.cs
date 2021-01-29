@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -148,7 +149,7 @@ namespace FortnoxAPILibrary.Connectors
             base.Resource = "sie/" + (int)sieType;
             string requestString = base.GetUrl();
 
-            this.Parameters = new Dictionary<string, string>();
+            this.Parameters = new ConcurrentDictionary<string, string>();
 
             AddCustomParameters();
 
@@ -252,22 +253,22 @@ namespace FortnoxAPILibrary.Connectors
                     }
                 }
 
-                this.Parameters.Add("selection", sel);
+                this.Parameters.TryAdd("selection", sel);
             }
 
             if (ExportOptions.ExportAll)
             {
-                this.Parameters.Add("exportall", "true");
+                this.Parameters.TryAdd("exportall", "true");
             }
 
             if (!string.IsNullOrEmpty(this.ExportOptions.FromDate))
             {
-                this.Parameters.Add("fromdate", this.ExportOptions.FromDate);
+                this.Parameters.TryAdd("fromdate", this.ExportOptions.FromDate);
             }
 
             if (!string.IsNullOrEmpty(ExportOptions.ToDate))
             {
-                this.Parameters.Add("todate", this.ExportOptions.ToDate);
+                this.Parameters.TryAdd("todate", this.ExportOptions.ToDate);
             }
         }
 
